@@ -1069,8 +1069,13 @@ function buildModal(r) {
     var cm = r && r.event_plan && r.event_plan[ev];
     var camRows = allCams.map(function(cam){
       var ci = cm && cm[cam];
+      var curV = (ci&&ci.v) ? ci.v : '-';
+      if (curV==='ー') curV='-';
+      var vOpts = ['-','◎','○','x'].map(function(opt){
+        return '<option value="'+opt+'" '+(curV===opt?'selected':'')+'>'+opt+'</option>';
+      }).join('');
       return '<div class="cam-row"><label>'+cam+'</label>'
-        +'<input class="ev-val" data-ev="'+ev+'" data-cam="'+cam+'" type="text" value="'+(ci?esc(ci.v||''):'')+'" placeholder="-">'
+        +'<select class="ev-val" data-ev="'+ev+'" data-cam="'+cam+'">'+vOpts+'</select>'
         +'<select class="ev-st" data-ev="'+ev+'" data-cam="'+cam+'">'
         +'<option value="" '+(ci&&ci.s?'':'selected')+'>-</option>'
         +'<option value="request" '+(ci&&ci.s==='request'?'selected':'')+'>要望</option>'
@@ -1261,11 +1266,12 @@ async function saveReq() {
   var cameras = [...document.querySelectorAll('.cam-chk:checked')].map(function(el){return el.value;});
   var event_plan = {};
   document.querySelectorAll('.ev-val').forEach(function(inp){
-    var ev=inp.dataset.ev, cam=inp.dataset.cam, val=inp.value.trim();
+    var ev=inp.dataset.ev, cam=inp.dataset.cam, val=inp.value;
     var st = (document.querySelector('.ev-st[data-ev="'+ev+'"][data-cam="'+cam+'"]')||{}).value || null;
-    if (val || st) {
+    var effectiveVal = (val === '-') ? '' : val;
+    if (effectiveVal || st) {
       if (!event_plan[ev]) event_plan[ev] = {};
-      event_plan[ev][cam] = {v: val, s: st||null};
+      event_plan[ev][cam] = {v: effectiveVal, s: st||null};
     }
   });
   var cat3 = gv('m_cat3');
