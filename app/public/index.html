@@ -1,0 +1,1656 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>BEV要件織り込み管理</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f4f5f7;--surf:#fff;--bdr:#dfe1e6;
+  --ink:#172b4d;--ink2:#5e6c84;--ink3:#97a0af;
+  --brand:#0052cc;--brand2:#0065ff;
+  --g0:#ebecf0;--g1:#dfe1e6;
+  --req:#ffebe6;--req-t:#de350b;
+  --agr:#fffae6;--agr-t:#ff8b00;
+  --cnf:#e3fcef;--cnf-t:#006644;
+  --warn:#ff8b00;--red:#de350b;
+  --sh:0 1px 3px rgba(0,0,0,.12);
+  --sh2:0 4px 16px rgba(0,0,0,.18);
+}
+body{font-family:-apple-system,'Hiragino Sans','Yu Gothic',sans-serif;font-size:13px;background:var(--bg);color:var(--ink);height:100vh;overflow:hidden;display:flex;flex-direction:column}
+
+/* ===== TOP BAR ===== */
+.topbar{background:var(--brand);color:#fff;height:44px;display:flex;align-items:center;padding:0 12px;gap:8px;flex-shrink:0;box-shadow:0 2px 6px rgba(0,82,204,.35)}
+.logo{font-size:15px;font-weight:900;letter-spacing:-.5px;white-space:nowrap}
+.proj-badge{font-size:11px;font-weight:600;background:rgba(255,255,255,.15);padding:2px 8px;border-radius:4px;white-space:nowrap}
+.nav-tabs{display:flex;gap:2px;margin-left:8px}
+.ntab{padding:4px 12px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;color:rgba(255,255,255,.7);border:none;background:transparent;transition:.12s}
+.ntab:hover,.ntab.active{color:#fff;background:rgba(255,255,255,.2)}
+#jiraStatus{font-size:10px;opacity:.6;white-space:nowrap}
+
+/* ===== FILTER BAR ===== */
+.filterbar{background:var(--surf);border-bottom:2px solid var(--bdr);padding:6px 12px;display:flex;align-items:center;gap:6px;flex-shrink:0;flex-wrap:wrap}
+.fbl{font-size:10px;font-weight:700;color:var(--ink3);white-space:nowrap}
+.fbf{padding:3px 6px;border:1px solid var(--bdr);border-radius:4px;font-size:12px;color:var(--ink);background:#fff;outline:none;height:26px}
+.fbf:focus{border-color:var(--brand);box-shadow:0 0 0 2px rgba(0,82,204,.15)}
+.fb-search{padding:3px 8px;border:1px solid var(--bdr);border-radius:4px;font-size:12px;background:#fff;outline:none;height:26px;min-width:160px}
+.fb-search:focus{border-color:var(--brand);box-shadow:0 0 0 2px rgba(0,82,204,.15)}
+.fb-sep{width:1px;height:20px;background:var(--bdr);margin:0 2px}
+.fcnt{font-size:11px;color:var(--ink3);white-space:nowrap;margin-left:auto}
+.btn-sm{padding:3px 10px;border:none;border-radius:4px;font-size:11px;font-weight:700;cursor:pointer;height:26px;white-space:nowrap}
+.btn-add-top{background:var(--brand);color:#fff}.btn-add-top:hover{background:var(--brand2)}
+.btn-rst-top{background:var(--g0);color:var(--ink2)}.btn-rst-top:hover{background:var(--g1)}
+.btn-gear{background:rgba(0,0,0,0);color:rgba(255,255,255,.7);border:none;cursor:pointer;font-size:16px;padding:2px 6px;border-radius:4px;line-height:1}
+.btn-gear:hover{background:rgba(255,255,255,.15);color:#fff}
+
+/* ===== APP LAYOUT ===== */
+.app{display:flex;flex:1;overflow:hidden}
+.content{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.content-hdr{padding:5px 12px;background:var(--surf);border-bottom:1px solid var(--bdr);display:flex;align-items:center;gap:6px;flex-shrink:0}
+.sub-tabs{display:flex;gap:3px}
+.stab{padding:3px 10px;border-radius:4px;font-size:11px;font-weight:600;cursor:pointer;background:var(--g0);color:var(--ink2);border:none}
+.stab.active{background:var(--brand);color:#fff}
+.sort-sel{padding:3px 7px;border:1px solid var(--bdr);border-radius:4px;font-size:11px;color:var(--ink);background:#fff;outline:none;margin-left:auto}
+.loading{padding:40px;text-align:center;color:var(--ink3);font-size:14px}
+
+/* ===== TABLE ===== */
+.view{flex:1;overflow:auto}
+table{border-collapse:collapse;white-space:nowrap}
+thead th{position:sticky;top:0;z-index:21;background:#1a237e;color:#e8eaf6;font-size:10px;font-weight:600;border-right:1px solid #283593;padding:0;text-align:center;vertical-align:bottom}
+.thb{padding:4px 5px;min-height:54px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:1px}
+.th-ev{font-size:9px;line-height:1.2;white-space:pre-wrap;max-width:66px;text-align:center}
+.th-dt{font-size:8px;opacity:.5}
+.th-dl{font-size:8px;color:#ffd600}
+
+/* Frozen cols — 2 fixed cols only */
+.f0{position:sticky;left:0;z-index:11;min-width:var(--col0w,260px);max-width:var(--col0w,260px);background:var(--surf);font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.f1{position:sticky;left:var(--col0w,260px);z-index:11;min-width:280px;max-width:280px;border-right:2px solid #7986cb !important;background:var(--surf)}
+.col-resize-handle{position:absolute;right:0;top:0;bottom:0;width:5px;cursor:col-resize;z-index:40;background:transparent}
+.col-resize-handle:hover,.col-resize-handle.dragging{background:rgba(121,134,203,.5)}
+/* corner sticky cells: need top:0 + left:0 both explicit, z-index above all body cells */
+thead .f0{top:0;left:0;z-index:32;background:#1a237e}
+thead .f1{top:0;left:var(--col0w,260px);z-index:32;background:#1a237e}
+
+tbody tr{border-bottom:1px solid var(--bdr);cursor:pointer;transition:background .06s}
+tbody tr:hover td{background:#f0f4ff!important}
+tbody tr.sel td{background:#dbeafe!important}
+tbody tr:nth-child(even) td{background:#fafbff}
+td{padding:5px 7px;border-right:1px solid var(--bdr);font-size:12px;vertical-align:middle;overflow:hidden;text-overflow:ellipsis}
+
+/* Cell content */
+.cam-badges{display:flex;flex-wrap:wrap;gap:2px;margin-top:3px}
+.cb{font-size:9px;font-weight:700;padding:1px 4px;border-radius:2px;background:var(--g0);color:var(--ink2)}
+.cb.FCM{background:#e3f2fd;color:#0d47a1}
+.cb.PVM{background:#e8f5e9;color:#1b5e20}
+.cb.Side,.cb.SideEIM{background:#f3e5f5;color:#4a148c}
+.cb.Tele{background:#fbe9e7;color:#bf360c}
+.cb.All{background:#eceff1;color:#263238}
+.td-spec{font-size:11px;font-family:monospace;line-height:1.3}
+.ver-b{display:inline-block;padding:1px 5px;background:#e8eaf6;color:#283593;border-radius:2px;font-size:9px;font-weight:700;margin-right:3px}
+.dt-b{font-size:10px;color:var(--ink3)}
+.dt-warn{color:var(--warn);font-weight:700}
+.td-desc{font-size:12px;line-height:1.4;white-space:normal;word-break:break-all}
+
+/* Event cells */
+.ec{width:72px;min-width:72px;text-align:left;padding:3px 4px;vertical-align:top}
+.cam-ev-list{display:flex;flex-direction:column;gap:1px}
+.cev{display:flex;align-items:center;gap:3px;padding:1px 3px;border-radius:2px;font-size:10px;font-weight:700}
+.cev.req{background:var(--req);color:var(--req-t)}
+.cev.agr{background:var(--agr);color:var(--agr-t)}
+.cev.cnf{background:var(--cnf);color:var(--cnf-t)}
+.cev.cascade{color:#81c784;font-size:9px}
+.cev-cam{font-size:8px;font-weight:700;min-width:26px;opacity:.8}
+.cev-val{font-size:10px}
+
+/* JIRA chips */
+.jchip{display:inline-block;padding:1px 5px;background:#0052cc;color:#fff;border-radius:2px;font-size:9px;font-weight:700;text-decoration:none;margin:1px}
+.jchip:hover{background:#0065ff}
+
+/* ===== DASHBOARD ===== */
+.dash{padding:16px;overflow-y:auto;flex:1}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px;margin-bottom:16px}
+.kpi{background:var(--surf);border-radius:6px;padding:12px;box-shadow:var(--sh);border-left:4px solid}
+.kpi.total{border-color:var(--brand)}.kpi.req{border-color:var(--req-t)}.kpi.agr{border-color:var(--warn)}.kpi.cnf{border-color:var(--cnf-t)}
+.kpi-lbl{font-size:10px;color:var(--ink3);font-weight:700;margin-bottom:3px}
+.kpi-num{font-size:26px;font-weight:900;color:var(--ink);line-height:1}
+.kpi-sub{font-size:10px;color:var(--ink3);margin-top:3px}
+.sec-ttl{font-size:13px;font-weight:700;margin:14px 0 6px}
+.pt{width:100%;border-collapse:collapse;background:var(--surf);border-radius:6px;overflow:hidden;box-shadow:var(--sh)}
+.pt th{background:var(--g0);padding:7px 10px;font-size:11px;font-weight:700;color:var(--ink2);text-align:left;border-bottom:1px solid var(--bdr)}
+.pt td{padding:7px 10px;font-size:12px;border-bottom:1px solid var(--bdr);vertical-align:middle}
+.pt tr:last-child td{border:none}
+.pt tr[onclick]{cursor:pointer}.pt tr[onclick]:hover td{background:#f0f4ff}
+.pb-wrap{height:7px;background:var(--g0);border-radius:4px;overflow:hidden;min-width:70px}
+.pb{height:100%;border-radius:4px}
+.ev-sum-scroll{overflow-x:auto;margin-top:4px}
+.est{border-collapse:collapse;white-space:nowrap}
+.est th{padding:4px 8px;font-size:10px;font-weight:600;color:var(--ink2);background:var(--g0);border:1px solid var(--bdr);text-align:center}
+.est td{padding:4px 8px;font-size:11px;border:1px solid var(--bdr);text-align:center;min-width:50px}
+.s-cnf{background:var(--cnf);color:var(--cnf-t);font-weight:700}
+.s-agr{background:var(--agr);color:var(--agr-t);font-weight:700}
+.s-req{background:var(--req);color:var(--req-t);font-weight:700}
+.s-nil{color:var(--ink3)}
+
+/* ===== DRAWER ===== */
+.drawer{position:fixed;right:0;top:44px;bottom:0;width:420px;background:var(--surf);border-left:1px solid var(--bdr);box-shadow:var(--sh2);z-index:100;display:flex;flex-direction:column;transform:translateX(100%);transition:transform .2s ease}
+.drawer.open{transform:translateX(0)}
+.dr-hdr{padding:12px 14px;background:var(--brand);color:#fff;flex-shrink:0;position:relative}
+.dr-id{font-size:10px;opacity:.65;font-family:monospace}
+.dr-cam{font-size:12px;font-weight:700;margin-top:2px}
+.dr-title{font-size:13px;font-weight:700;margin-top:5px;line-height:1.4;word-break:break-all}
+.dr-close{position:absolute;top:10px;right:10px;background:rgba(255,255,255,.15);border:none;color:#fff;width:24px;height:24px;border-radius:50%;cursor:pointer;font-size:14px;line-height:24px;text-align:center}
+.dr-close:hover{background:rgba(255,255,255,.3)}
+.dr-body{padding:12px 14px;flex:1;overflow-y:auto}
+.ds{margin-bottom:10px}
+.dl{font-size:10px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px}
+.dv{font-size:12px;line-height:1.5;word-break:break-all}
+.dv-mono{font-family:monospace;background:#f4f5f7;padding:3px 7px;border-radius:3px;border-left:3px solid var(--brand);font-size:11px}
+.warn-box{background:#fff7e0;border:1px solid #ffd600;border-radius:4px;padding:5px 9px;font-size:11px;color:#7a5000;margin-bottom:7px}
+.ev-detail-list{display:flex;flex-direction:column;gap:3px}
+.ev-dr-row{border-radius:4px;padding:5px 8px;font-size:11px}
+.ev-dr-row.req{background:var(--req)}.ev-dr-row.agr{background:var(--agr)}.ev-dr-row.cnf{background:var(--cnf)}
+.ev-dr-row .ev-name{font-weight:700;font-size:11px;margin-bottom:2px}
+.ev-dr-cams{display:flex;gap:5px;flex-wrap:wrap}
+.ev-dr-cam{display:flex;align-items:center;gap:3px;font-size:10px}
+.ev-dr-cam .cam{font-weight:700;min-width:32px}
+.dr-foot{padding:8px 14px;border-top:1px solid var(--bdr);flex-shrink:0;display:flex;gap:6px}
+.btn-edit{flex:1;padding:6px;background:#e8eaf6;color:#283593;border:none;border-radius:4px;font-size:12px;font-weight:700;cursor:pointer}
+.btn-edit:hover{background:#c5cae9}
+
+/* ===== MODAL ===== */
+.mbg{position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:200;display:flex;align-items:center;justify-content:center}
+.mbg.hid{display:none}
+.modal{background:var(--surf);border-radius:8px;width:640px;max-width:96vw;max-height:92vh;overflow-y:auto;box-shadow:var(--sh2)}
+.modal-lg{width:min(1100px,96vw);min-width:500px;max-height:92vh;overflow:hidden;display:flex;flex-direction:column;resize:both}
+.modal-lg .mbd{flex:1;overflow:hidden;min-height:0;display:flex;flex-direction:column}
+.mhd{padding:13px 16px;background:var(--brand);color:#fff;border-radius:8px 8px 0 0;font-weight:700;font-size:14px;display:flex;align-items:center;gap:8px}
+.mbd{padding:14px 16px;display:flex;flex-direction:column;gap:9px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+.field label{font-size:11px;font-weight:700;color:var(--ink2);display:block;margin-bottom:2px}
+.field input,.field select,.field textarea{width:100%;padding:5px 8px;border:1px solid var(--bdr);border-radius:4px;font-size:12px;font-family:inherit;color:var(--ink);outline:none}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--brand);box-shadow:0 0 0 2px rgba(0,82,204,.15)}
+.field textarea{resize:vertical;min-height:52px}
+.ev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+.ev-item{border:1px solid var(--bdr);border-radius:4px;padding:6px 8px;background:var(--g0)}
+.ev-item-name{font-size:10px;font-weight:700;color:var(--ink2);margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cam-ev-inputs{display:flex;flex-direction:column;gap:2px}
+.cam-row{display:flex;align-items:center;gap:4px;font-size:10px}
+.cam-row label{min-width:30px;font-weight:700;color:var(--ink2)}
+.cam-row input{flex:1;padding:2px 4px;font-size:10px;border:1px solid var(--bdr);border-radius:3px}
+.cam-row select{padding:1px 3px;font-size:10px;border:1px solid var(--bdr);border-radius:3px}
+.mft{padding:10px 16px;border-top:1px solid var(--bdr);display:flex;gap:6px;justify-content:flex-end;align-items:center}
+.jira-note{font-size:11px;color:var(--ink3);flex:1}
+.jira-note.ok{color:var(--cnf-t)}
+.btn{padding:6px 14px;border:none;border-radius:4px;font-size:12px;font-weight:700;cursor:pointer}
+.btn-pri{background:var(--brand);color:#fff}.btn-pri:hover{background:var(--brand2)}
+.btn-sec{background:var(--g0);color:var(--ink2)}.btn-sec:hover{background:var(--g1)}
+.btn-dan{background:var(--red);color:#fff}.btn-dan:hover{background:#bf2600}
+.chk-jira{display:flex;align-items:center;gap:4px;font-size:11px;cursor:pointer}
+
+/* ===== JIRA PREVIEW ===== */
+.jira-preview{margin-top:8px;border:2px solid #0052cc;border-radius:6px;background:#fff;font-size:11px;overflow:hidden;display:none}
+.jira-preview.show{display:block}
+.jp-titlebar{background:#0052cc;color:#fff;padding:6px 10px;font-size:10px;font-weight:700;display:flex;align-items:center;gap:6px}
+.jp-issuetype{background:rgba(255,255,255,.2);padding:1px 6px;border-radius:3px;font-size:9px}
+.jp-body{padding:10px 12px;display:flex;flex-direction:column;gap:6px}
+.jp-summary{font-size:13px;font-weight:700;color:var(--ink);line-height:1.3;word-break:break-all}
+.jp-fields{display:grid;grid-template-columns:1fr 1fr;gap:4px 16px;margin-top:4px}
+.jp-field{display:flex;flex-direction:column;gap:1px}
+.jp-fl{font-size:9px;font-weight:700;color:var(--ink3);text-transform:uppercase;letter-spacing:.4px}
+.jp-fv{font-size:11px;color:var(--ink)}
+.jp-fv.missing{color:var(--ink3);font-style:italic}
+.jp-labels{display:flex;gap:3px;flex-wrap:wrap}
+.jp-label{background:#e3f2fd;color:#0d47a1;padding:1px 5px;border-radius:2px;font-size:9px;font-weight:700}
+.jp-desc{background:#f4f5f7;border-radius:4px;padding:6px 8px;font-size:10px;white-space:pre-wrap;max-height:120px;overflow-y:auto;line-height:1.5;color:var(--ink2)}
+.jp-warn{background:#fff7e0;border:1px solid #ffd600;border-radius:3px;padding:4px 8px;font-size:10px;color:#7a5000;margin-top:4px}
+
+/* ===== EVENT MANAGEMENT MODAL ===== */
+.ev-mgmt-list{display:flex;flex-direction:column;gap:4px;max-height:65vh;overflow-y:auto;padding-right:4px}
+.ev-mgmt-row{display:grid;grid-template-columns:52px 140px 110px 1fr auto;align-items:center;gap:8px;padding:6px 8px;border:1px solid var(--bdr);border-radius:5px;background:var(--surf)}
+.ev-mgmt-row.hidden-ev{opacity:.45}
+.ev-mgmt-row input[type="text"],.ev-mgmt-row input[type="date"]{padding:3px 6px;font-size:11px;border:1px solid var(--bdr);border-radius:3px;outline:none;width:100%}
+.ev-mgmt-row input:focus{border-color:var(--brand)}
+.ev-dl-grid{display:flex;gap:6px;flex-wrap:wrap}
+.ev-dl-item{display:flex;align-items:center;gap:3px;font-size:10px}
+.ev-dl-item label{color:var(--ink3);font-size:9px;white-space:nowrap}
+.ev-dl-item input{width:90px;padding:2px 4px;font-size:10px;border:1px solid var(--bdr);border-radius:3px;outline:none}
+.ev-dl-item input:focus{border-color:var(--brand)}
+.btn-del-ev{padding:2px 6px;font-size:11px;background:none;border:1px solid var(--bdr);border-radius:3px;cursor:pointer;color:var(--ink3)}
+.btn-del-ev:hover{background:var(--req);color:var(--req-t);border-color:var(--req-t)}
+.btn-hide-ev{padding:2px 6px;font-size:11px;background:none;border:1px solid var(--bdr);border-radius:3px;cursor:pointer;color:var(--ink3)}
+.btn-hide-ev:hover{background:var(--g1);color:var(--ink2)}
+.ev-mgmt-row.hidden-ev .btn-hide-ev{background:var(--brand);color:#fff;border-color:var(--brand)}
+.ev-add-row{display:flex;gap:6px;align-items:center;padding:8px 0 0;border-top:1px solid var(--bdr);margin-top:4px}
+.ev-add-row input{padding:4px 8px;font-size:12px;border:1px solid var(--bdr);border-radius:4px;outline:none;flex:1}
+.ev-add-row input:focus{border-color:var(--brand)}
+
+/* ===== EVENT DEPENDENCY TREE ===== */
+.dep-tree{padding:10px 12px;background:#f8f9ff;border-radius:6px;border:1px solid var(--bdr)}
+.dep-tree-title{font-size:12px;font-weight:700;color:var(--ink2);margin-bottom:8px}
+.dep-tree-hint{font-size:10px;color:var(--ink3);margin-top:6px}
+/* graph canvas */
+#depGraphWrap{display:flex;flex-direction:column;gap:0;flex:1;min-height:0;overflow:hidden}
+#depGraphScroll{flex:1;min-height:80px;overflow:auto;border:1px solid var(--bdr);border-radius:5px 5px 0 0;background:#fafbff}
+#depSideArea{flex:0 0 auto;max-height:35%;overflow-y:auto;border:1px solid var(--bdr);border-top:none;border-radius:0 0 5px 5px;background:var(--surf);padding:6px 10px}
+#depGraphSvg{display:block;overflow:visible}
+#depGraphSvg .g-node rect{fill:#fff;stroke:#5c7cfa;stroke-width:1.5;filter:drop-shadow(0 1px 2px rgba(0,0,0,.12))}
+#depGraphSvg .g-node.g-root rect{fill:#e8f0fe;stroke:#1a73e8;stroke-width:2}
+#depGraphSvg .g-node.g-hidden rect{fill:#f5f5f5;stroke:#bbb;stroke-dasharray:4 3}
+#depGraphSvg .g-node text{font-size:11px;fill:var(--ink);font-family:-apple-system,'Hiragino Sans','Yu Gothic',sans-serif}
+#depGraphSvg .g-node.g-hidden text{fill:#999}
+#depGraphSvg .g-edge{fill:none;stroke:#5c7cfa;stroke-width:1.5;marker-end:url(#arrowhead)}
+#depGraphSvg .g-edge.g-hidden-edge{stroke:#bbb;stroke-dasharray:4 3;marker-end:url(#arrowhead-hidden)}
+/* bottom list for parent assignment */
+#depSideList{font-size:11px;display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:4px 12px}
+#depSideList .dep-row{display:grid;grid-template-columns:1fr auto;align-items:center;gap:4px;padding:3px 0;border-bottom:1px solid var(--bdr)}
+#depSideList select{padding:2px 4px;font-size:10px;border:1px solid var(--bdr);border-radius:3px;outline:none;background:#fff;max-width:140px}
+#depSideList select:focus{border-color:var(--brand)}
+.dep-row-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:600;color:var(--ink2)}
+
+/* Tooltip */
+.tip{position:fixed;background:rgba(23,43,77,.95);color:#fff;padding:5px 9px;border-radius:4px;font-size:11px;pointer-events:none;z-index:9999;max-width:260px;line-height:1.5;display:none;white-space:pre-wrap}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-thumb{background:#c1c7d0;border-radius:3px}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="logo">要件管理</div>
+  <div class="proj-badge">BEV露出ISP 仕様要件 織り込みマトリクス</div>
+  <div class="nav-tabs">
+    <button class="ntab active" id="t0" onclick="showTab(0)">ダッシュボード</button>
+    <button class="ntab" id="t1" onclick="showTab(1)">マトリクス</button>
+    <button class="ntab" id="t2" onclick="showTab(2)">要件リスト</button>
+  </div>
+  <button class="btn-gear" title="イベント管理" onclick="openEvMgmt()">&#9881;</button>
+  <button class="btn-gear" title="Excelエクスポート" onclick="exportExcel()">&#x1F4E5;</button>
+  <span id="jiraStatus" style="font-size:10px;opacity:.6;margin-left:4px">JIRA確認中...</span>
+</div>
+
+<!-- FILTER BAR -->
+<div class="filterbar">
+  <span class="fbl">検索</span>
+  <input class="fb-search" id="qSearch" type="text" placeholder="仕様書・説明・JIRA...">
+  <div class="fb-sep"></div>
+  <span class="fbl">カメラ</span>
+  <select class="fbf" id="fCam"><option value="">全て</option></select>
+  <span class="fbl">仕様書担当</span>
+  <select class="fbf" id="fPersons"><option value="">全て</option></select>
+  <span class="fbl">要件担当</span>
+  <select class="fbf" id="fReqPerson"><option value="">全て</option></select>
+  <span class="fbl">イベント</span>
+  <select class="fbf" id="fEvent"><option value="">全て</option></select>
+  <span id="evModeWrap" style="display:none;gap:2px">
+    <button class="btn-sm" id="evModeAll" onclick="setEvMode('all')" style="background:var(--brand);color:#fff">含む</button>
+    <button class="btn-sm" id="evModeNew" onclick="setEvMode('new')" style="background:var(--g0);color:var(--ink2)">新規のみ</button>
+  </span>
+  <span class="fbl">ステータス</span>
+  <select class="fbf" id="fSt">
+    <option value="">全て</option>
+    <option value="request">要望（合意待ち）</option>
+    <option value="agreed">合意済み</option>
+    <option value="confirmed">実装確定</option>
+    <option value="any">計画あり</option>
+    <option value="none">未計画</option>
+  </select>
+  <span class="fbl">SW変更</span>
+  <select class="fbf" id="fSw"><option value="">全て</option><option value="Y">あり(Y)</option><option value="N">なし(N)</option></select>
+  <div class="fb-sep"></div>
+  <button class="btn-sm btn-add-top" onclick="openAdd()">＋ 要件追加</button>
+  <button class="btn-sm btn-rst-top" onclick="resetF()">リセット</button>
+  <span class="fcnt" id="fcnt">読み込み中...</span>
+</div>
+
+<div class="app">
+  <div class="content">
+    <div class="content-hdr">
+      <div class="sub-tabs" id="subTabs" style="display:none">
+        <button class="stab active" id="sv0" onclick="setSubV(0)">全カメラ</button>
+        <button class="stab" id="sv1" onclick="setSubV(1)">カメラ絞り込み</button>
+      </div>
+      <select class="sort-sel" id="sortSel" onchange="applyF()">
+        <option value="spec">仕様書順</option>
+        <option value="id">ID順</option>
+        <option value="cam">カメラ順</option>
+        <option value="date">発行日順</option>
+        <option value="warn">警告優先</option>
+        <option value="status">ステータス優先</option>
+      </select>
+      <span style="font-size:10px;color:var(--ink3);margin-left:6px">
+        <span class="s-req" style="padding:1px 5px;border-radius:3px">要望</span>
+        <span class="s-agr" style="padding:1px 5px;border-radius:3px;margin-left:3px">合意済</span>
+        <span class="s-cnf" style="padding:1px 5px;border-radius:3px;margin-left:3px">確定</span>
+      </span>
+    </div>
+    <div class="loading" id="loadingMsg">データ読み込み中...</div>
+    <div class="view" id="tab0" style="display:none"><div class="dash" id="dashContent"></div></div>
+    <div class="view" id="tab1" style="display:none"><table id="matTbl"><thead id="matHead"></thead><tbody id="matBody"></tbody></table></div>
+    <div class="view" id="tab2" style="display:none"><table id="lstTbl"><thead id="lstHead"></thead><tbody id="lstBody"></tbody></table></div>
+  </div>
+</div>
+
+<!-- DRAWER -->
+<div class="drawer" id="drawer">
+  <div class="dr-hdr">
+    <button class="dr-close" onclick="closeDrawer()">&#x2715;</button>
+    <div class="dr-id" id="drId"></div>
+    <div class="dr-cam" id="drCam"></div>
+    <div class="dr-title" id="drTitle"></div>
+  </div>
+  <div class="dr-body" id="drBody"></div>
+  <div class="dr-foot">
+    <button class="btn-edit" onclick="openEditCurrent()">&#x270E; 編集</button>
+  </div>
+</div>
+
+<!-- REQ EDIT MODAL -->
+<div class="mbg hid" id="mBg">
+  <div class="modal">
+    <div class="mhd"><span id="mTitle">要件を編集</span><button class="btn btn-sec" style="margin-left:auto;padding:2px 8px;font-size:11px" onclick="closeModal()">&#x2715;</button></div>
+    <div class="mbd" id="mBody"></div>
+    <div class="mft">
+      <span class="jira-note" id="jiraNote"></span>
+      <button class="btn btn-dan" id="btnDel" onclick="deleteReq()">削除</button>
+      <button class="btn btn-sec" onclick="closeModal()">キャンセル</button>
+      <button class="btn btn-pri" onclick="saveReq()">保存</button>
+    </div>
+  </div>
+</div>
+
+<!-- EVENT MANAGEMENT MODAL -->
+<div class="mbg hid" id="evMgmtBg">
+  <div class="modal modal-lg">
+    <div class="mhd">
+      &#9881; イベント管理
+      <div style="display:flex;gap:3px;margin-left:16px">
+        <button class="stab active" id="evTab0" onclick="switchEvTab(0)">スケジュール</button>
+        <button class="stab" id="evTab1" onclick="switchEvTab(1)">依存関係ツリー</button>
+      </div>
+      <button class="btn btn-sec" style="margin-left:auto;padding:2px 8px;font-size:11px" onclick="closeEvMgmt()">&#x2715;</button>
+    </div>
+    <div class="mbd">
+      <!-- Tab 0: Schedule -->
+      <div id="evPane0">
+        <div style="font-size:11px;color:var(--ink3)">表示するイベントをチェック。リリース日・仕様締め切り日を編集して保存。</div>
+        <div class="ev-mgmt-list" id="evMgmtList"></div>
+        <div class="ev-add-row">
+          <input id="newEvName" type="text" placeholder="新しいイベント名">
+          <input id="newEvDate" type="date" placeholder="リリース日">
+          <button class="btn btn-pri" onclick="addEvent()">＋ 追加</button>
+        </div>
+      </div>
+      <!-- Tab 1: Dependency graph -->
+      <div id="evPane1" style="display:none;flex:1;min-height:0;overflow:hidden;flex-direction:column">
+        <div id="depGraphWrap">
+          <div id="depGraphScroll"><svg id="depGraphSvg"></svg></div>
+          <div id="depSideArea">
+            <div style="font-size:10px;font-weight:700;color:var(--ink3);margin-bottom:4px">親イベント設定（変更するとグラフ即時更新）</div>
+            <div id="depSideList"></div>
+          </div>
+        </div>
+        <div class="dep-tree-hint" style="flex:0 0 auto;padding:6px 0 0">
+          「親イベント」を設定すると、その親で<b>合意済/実装確定</b>になっているカメラは子イベントに自動的に同じステータスが引き継がれます。
+          親なし = 独立したイベント（グラフ左端に配置）。
+        </div>
+      </div>
+    </div>
+    <div class="mft">
+      <span class="jira-note" id="evMgmtNote"></span>
+      <button class="btn btn-sec" onclick="closeEvMgmt()">キャンセル</button>
+      <button class="btn btn-pri" onclick="saveEvMgmt()">保存</button>
+    </div>
+  </div>
+</div>
+
+<div class="tip" id="tip"></div>
+
+<script>
+var G = {};
+var filtered = [];
+var currentTab = 0;
+var currentSubV = 0;
+var selId = null;
+var editTarget = null;
+var pg = 0, PSIZE = 80;
+var CAM_SHORT = ['FCM','TCM','SCM','PVM','Side','Tele'];
+var ALL_CAMS = ['FCM','TCM','SCM','PVM']; // "All"の実体
+function expandCams(cams) {
+  var out = [];
+  (cams||[]).forEach(function(c){
+    if (c==='All') ALL_CAMS.forEach(function(a){ if(out.indexOf(a)<0) out.push(a); });
+    else if (c!=='SideEIM' && out.indexOf(c)<0) out.push(c);
+  });
+  return out;
+}
+var JIRA_BASE = 'https://jira.geniie.net/browse/';
+var DL_LABELS = ['大規模仕様〆','小規模仕様〆','定数変更仕様〆'];
+var currentEvTab = 0;
+var evMode = 'all'; // 'all': cascade込み, 'new': raw(初出)のみ
+
+function setEvMode(mode) {
+  evMode = mode;
+  document.getElementById('evModeAll').style.background = mode==='all' ? 'var(--brand)' : 'var(--g0)';
+  document.getElementById('evModeAll').style.color = mode==='all' ? '#fff' : 'var(--ink2)';
+  document.getElementById('evModeNew').style.background = mode==='new' ? 'var(--brand)' : 'var(--g0)';
+  document.getElementById('evModeNew').style.color = mode==='new' ? '#fff' : 'var(--ink2)';
+  applyF();
+}
+
+function exportExcel() {
+  var btn = document.querySelector('.btn-gear[title="Excelエクスポート"]');
+  if (btn) btn.textContent = '...';
+  var a = document.createElement('a');
+  a.href = '/api/export/excel';
+  a.download = '';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(function(){ if (btn) btn.textContent = '📥'; }, 2000);
+}
+
+async function api(method, path, body) {
+  var opts = {method: method, headers: {'Content-Type':'application/json'}};
+  if (body) opts.body = JSON.stringify(body);
+  var r = await fetch(path, opts);
+  if (!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+
+async function init() {
+  try {
+    G = await api('GET', '/api/requirements');
+    document.getElementById('loadingMsg').style.display = 'none';
+    buildFilters();
+    applyF();
+    showTab(0);
+    checkJira();
+  } catch(e) {
+    document.getElementById('loadingMsg').textContent = 'エラー: ' + e.message;
+  }
+}
+
+async function checkJira() {
+  try {
+    var r = await api('GET', '/api/jira/test');
+    var el = document.getElementById('jiraStatus');
+    el.textContent = r.ok ? ('JIRA: ' + r.user) : 'JIRA: 未接続';
+    el.style.color = r.ok ? '#7dffb3' : 'rgba(255,255,255,.4)';
+  } catch(e) {}
+}
+
+var SL = {request:'要望', agreed:'合意済み', confirmed:'実装確定'};
+var SC = {request:'req', agreed:'agr', confirmed:'cnf'};
+function isPos(v) { return v && v !== '-' && v !== 'ー' && v !== 'x' && v !== '×' && v !== '✗'; }
+function camColor(c) {
+  var m = {FCM:'#0d47a1',TCM:'#1565c0',SCM:'#0277bd',PVM:'#1b5e20',Side:'#4a148c',Tele:'#bf360c',All:'#263238'};
+  return m[c] || '#333';
+}
+
+function visibleEvents() {
+  if (!G.events_config) return G.events || [];
+  return G.events_config.filter(function(e){ return e.visible !== false; }).map(function(e){ return e.name; });
+}
+
+function getWarns(r) {
+  if (!r.issue_date) return [];
+  var im = new Date(r.issue_date).getTime();
+  var warns = [];
+  Object.keys(r.event_plan || {}).forEach(function(ev) {
+    var camMap = r.event_plan[ev];
+    var hasVal = Object.values(camMap).some(function(ci){ return ci && isPos(ci.v); });
+    if (!hasVal) return;
+    var ecfg = G.events_config && G.events_config.find(function(e){ return e.name === ev; });
+    var dls = DL_LABELS.map(function(l) {
+      var date = (ecfg && ecfg.deadlines && ecfg.deadlines[l]) || (G.schedules && G.schedules[l] && G.schedules[l][ev]);
+      return date && date.match(/^\d{4}/) ? new Date(date).getTime() : null;
+    }).filter(Boolean);
+    if (!dls.length) return;
+    var early = Math.min.apply(null, dls);
+    var diff = Math.round((early - im) / 86400000);
+    if (diff >= 0 && diff <= 14) warns.push({ev: ev, diff: diff, over: false});
+    else if (diff < 0 && diff >= -7) warns.push({ev: ev, diff: diff, over: true});
+  });
+  return warns;
+}
+
+function maxStatus(r) {
+  var rank = {confirmed:3, agreed:2, request:1};
+  var mx = 0;
+  Object.values(r.event_plan || {}).forEach(function(cm) {
+    Object.values(cm).forEach(function(ci){ if(ci && rank[ci.s] > mx) mx = rank[ci.s]; });
+  });
+  return mx;
+}
+
+function cascadeFrom(r) {
+  var evs = visibleEvents();
+  for (var i = 0; i < evs.length; i++) {
+    var cm = r.event_plan && r.event_plan[evs[i]];
+    if (!cm) continue;
+    var ok = Object.values(cm).some(function(ci){
+      return ci && (ci.s === 'agreed' || ci.s === 'confirmed') && isPos(ci.v);
+    });
+    if (ok) return i;
+  }
+  return -1;
+}
+
+// dependency cascade: apply parent event's agreed/confirmed status to descendant events
+function applyDependencyCascade(r) {
+  var cfg = G.events_config || [];
+  if (!cfg.length) return r.event_plan || {};
+  var ep = JSON.parse(JSON.stringify(r.event_plan || {}));
+  // Build parent map: event_name → parent_name
+  var parentMap = {};
+  cfg.forEach(function(e){ if (e.parent) parentMap[e.name] = e.parent; });
+  if (!Object.keys(parentMap).length) return ep;
+
+  // Topological order = config order
+  var evOrder = cfg.map(function(e){ return e.name; });
+  evOrder.forEach(function(evName){
+    var parent = parentMap[evName];
+    if (!parent) return;
+    var parentCams = ep[parent] || {};
+    Object.entries(parentCams).forEach(function(kv){
+      var cam = kv[0], ci = kv[1];
+      if (!ci || (ci.s !== 'agreed' && ci.s !== 'confirmed')) return;
+      if (!ep[evName]) ep[evName] = {};
+      var childCi = ep[evName][cam];
+      // Only cascade if child has no status yet
+      if (!childCi || !childCi.s) {
+        ep[evName][cam] = {v: ci.v || '◎', s: ci.s, cascaded: true};
+      }
+    });
+  });
+  return ep;
+}
+
+function esc(s) {
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function jiraLink(j) {
+  var ticket = j.replace(/^https?:\/\/[^/]+\/browse\//,'');
+  return '<a class="jchip" href="' + JIRA_BASE + ticket + '" target="_blank">' + ticket + '</a>';
+}
+
+// ===== フィルタ初期化 =====
+function buildFilters() {
+  function uniq(arr) { return [...new Set(arr.filter(Boolean))].sort(function(a,b){return a.localeCompare(b,'ja');}); }
+  function add(id, arr) {
+    var s = document.getElementById(id);
+    arr.forEach(function(v){ var o=document.createElement('option'); o.value=o.textContent=v; s.appendChild(o); });
+  }
+  add('fCam', uniq(G.req_data.flatMap(function(r){return expandCams(r.cameras);})));
+  add('fPersons', uniq(G.req_data.flatMap(function(r){return r.persons||[];})));
+  add('fReqPerson', uniq(G.req_data.flatMap(function(r){return r.req_person ? [r.req_person] : [];})));
+  add('fEvent', visibleEvents());
+  ['fCam','fPersons','fReqPerson','fSt','fSw'].forEach(function(id){
+    document.getElementById(id).addEventListener('change', applyF);
+  });
+  document.getElementById('fEvent').addEventListener('change', function() {
+    document.getElementById('evModeWrap').style.display = this.value ? 'flex' : 'none';
+    applyF();
+  });
+  document.getElementById('qSearch').addEventListener('input', applyF);
+  document.getElementById('sortSel').addEventListener('change', applyF);
+}
+
+// ===== フィルタ適用 =====
+function applyF() {
+  var fc = document.getElementById('fCam').value;
+  var fpersons = document.getElementById('fPersons').value;
+  var frp = document.getElementById('fReqPerson').value;
+  var fev = document.getElementById('fEvent').value;
+  var fst = document.getElementById('fSt').value;
+  var fsw = document.getElementById('fSw').value;
+  var fq = document.getElementById('qSearch').value.toLowerCase();
+  var sort = document.getElementById('sortSel').value;
+
+  filtered = G.req_data.filter(function(r) {
+    if (fc && !expandCams(r.cameras).includes(fc)) return false;
+    if (fpersons && !(r.persons||[]).includes(fpersons)) return false;
+    if (frp && r.req_person !== frp) return false;
+    if (fsw && r.sw !== fsw) return false;
+    if (fev) {
+      if (evMode === 'new') {
+        // 初出: このイベントに明示入力があり、かつそれより前の全イベントに明示入力がない
+        var cm = r.event_plan && r.event_plan[fev];
+        if (!cm || !Object.values(cm).some(function(ci){return ci && (ci.s||isPos(ci.v));})) return false;
+        var evOrder = (G.events_config || []).map(function(e){return e.name;});
+        var fevIdx = evOrder.indexOf(fev);
+        if (fevIdx > 0) {
+          var hasPrior = evOrder.slice(0, fevIdx).some(function(prevEv){
+            var pcm = r.event_plan && r.event_plan[prevEv];
+            return pcm && Object.values(pcm).some(function(ci){return ci && (ci.s||isPos(ci.v));});
+          });
+          if (hasPrior) return false;
+        }
+      } else {
+        // cascade込み: 親イベントを遡って確認
+        var ep = applyDependencyCascade(r);
+        var cm2 = ep[fev];
+        if (!cm2 || !Object.values(cm2).some(function(ci){return ci && (ci.s||isPos(ci.v));})) return false;
+      }
+    }
+    if (fst) {
+      var evs = Object.values(r.event_plan || {}).flatMap(function(cm){return Object.values(cm);});
+      if (fst === 'none') { if (evs.some(function(ci){return ci&&(ci.s||isPos(ci.v));})) return false; }
+      else if (fst === 'any') { if (!evs.some(function(ci){return ci&&isPos(ci.v);})) return false; }
+      else { if (!evs.some(function(ci){return ci&&ci.s===fst;})) return false; }
+    }
+    if (fq) {
+      var hay = [r.req_id,r.cat1,r.cat2,r.cat3,r.desc,(r.persons||[]).join(' '),r.summary].concat(r.jira||[]).join(' ').toLowerCase();
+      if (!hay.includes(fq)) return false;
+    }
+    return true;
+  });
+
+  filtered.sort(function(a,b) {
+    if (sort==='cam') return (a.cameras||[]).join().localeCompare((b.cameras||[]).join(),'ja');
+    if (sort==='date') return (a.issue_date||'').localeCompare(b.issue_date||'');
+    if (sort==='warn') return getWarns(b).length - getWarns(a).length;
+    if (sort==='status') return maxStatus(b) - maxStatus(a);
+    if (sort==='id') return a.req_id.localeCompare(b.req_id, undefined, {numeric:true});
+    // spec: V4H含むcat1を先頭グループ、それ以外を後続グループ。各グループ内は cat3→cat1→cat2→req_id の50音順
+    var aV4H = /V4H/.test(a.cat1||'') ? 0 : 1;
+    var bV4H = /V4H/.test(b.cat1||'') ? 0 : 1;
+    if (aV4H !== bV4H) return aV4H - bV4H;
+    var c3 = (a.cat3||'').localeCompare(b.cat3||'', 'ja');
+    if (c3!==0) return c3;
+    var c1 = (a.cat1||'').localeCompare(b.cat1||'', 'ja');
+    if (c1!==0) return c1;
+    var c2 = (a.cat2||'').localeCompare(b.cat2||'', 'ja');
+    if (c2!==0) return c2;
+    return a.req_id.localeCompare(b.req_id, undefined, {numeric:true});
+  });
+
+  document.getElementById('fcnt').textContent = filtered.length + ' / ' + G.req_data.length + ' 件';
+  pg = 0;
+  if (currentTab===0) renderDash();
+  else if (currentTab===1) renderMat();
+  else renderList();
+}
+
+function resetF() {
+  ['fCam','fReqPerson','fEvent','fSt','fSw'].forEach(function(id){document.getElementById(id).value='';});
+  document.getElementById('qSearch').value = '';
+  document.getElementById('evModeWrap').style.display = 'none';
+  setEvMode('all');
+}
+
+// ===== TABs =====
+function showTab(n) {
+  currentTab = n;
+  [0,1,2].forEach(function(i){
+    document.getElementById('t'+i).classList.toggle('active', i===n);
+    document.getElementById('tab'+i).style.display = i===n ? '' : 'none';
+  });
+  document.getElementById('subTabs').style.display = n===1 ? '' : 'none';
+  pg = 0;
+  if (n===0) renderDash();
+  else if (n===1) renderMat();
+  else renderList();
+}
+
+function setSubV(n) {
+  currentSubV = n;
+  document.getElementById('sv0').classList.toggle('active', n===0);
+  document.getElementById('sv1').classList.toggle('active', n===1);
+  pg = 0;
+  renderMat();
+}
+
+// ===== DASHBOARD =====
+function renderDash() {
+  var data = filtered;
+  var tot=data.length, req=0, agr=0, cnf=0;
+  data.forEach(function(r){
+    var ms = maxStatus(r);
+    if(ms>=3) cnf++; else if(ms>=2) agr++; else if(ms>=1) req++;
+  });
+  var byCam={};
+  data.forEach(function(r){
+    (r.cameras||[]).forEach(function(c){
+      if(!byCam[c]) byCam[c]={tot:0,req:0,agr:0,cnf:0};
+      byCam[c].tot++;
+      var ms=maxStatus(r);
+      if(ms>=3)byCam[c].cnf++; else if(ms>=2)byCam[c].agr++; else if(ms>=1)byCam[c].req++;
+    });
+  });
+  var evsList = visibleEvents();
+  var byEv={};
+  evsList.forEach(function(ev){byEv[ev]={req:0,agr:0,cnf:0};});
+  data.forEach(function(r){
+    Object.entries(r.event_plan||{}).forEach(function(kv){
+      var ev=kv[0],cm=kv[1];
+      if(!byEv[ev]) return;
+      var ms=Object.values(cm).reduce(function(mx,ci){
+        var rk={confirmed:3,agreed:2,request:1}[ci&&ci.s]||0; return rk>mx?rk:mx;
+      },0);
+      if(ms>=3)byEv[ev].cnf++; else if(ms>=2)byEv[ev].agr++; else if(ms>=1)byEv[ev].req++;
+    });
+  });
+  var warns=data.filter(function(r){return getWarns(r).length>0;});
+
+  var h='<div class="kpi-grid">';
+  h+='<div class="kpi total"><div class="kpi-lbl">表示中の要件数</div><div class="kpi-num">'+tot+'</div><div class="kpi-sub">全 '+G.req_data.length+' 件中</div></div>';
+  h+='<div class="kpi req"><div class="kpi-lbl">要望（合意待ち）</div><div class="kpi-num" style="color:var(--req-t)">'+req+'</div><div class="kpi-sub">ソフト合意を要する</div></div>';
+  h+='<div class="kpi agr"><div class="kpi-lbl">合意済み</div><div class="kpi-num" style="color:var(--agr-t)">'+agr+'</div></div>';
+  h+='<div class="kpi cnf"><div class="kpi-lbl">実装確定</div><div class="kpi-num" style="color:var(--cnf-t)">'+cnf+'</div></div>';
+  h+='</div>';
+
+  h+='<div class="sec-ttl">カメラ別 進捗</div>';
+  h+='<table class="pt"><tr><th>カメラ</th><th>件数</th><th>確定</th><th>合意</th><th>要望</th><th>進捗</th></tr>';
+  Object.entries(byCam).sort(function(a,b){return b[1].tot-a[1].tot;}).forEach(function(kv){
+    var c=kv[0],d=kv[1];
+    var pct=Math.round(d.cnf/d.tot*100);
+    h+='<tr><td><b style="color:'+camColor(c)+'">'+c+'</b></td><td>'+d.tot+'</td>';
+    h+='<td style="color:var(--cnf-t);font-weight:700">'+d.cnf+'</td>';
+    h+='<td style="color:var(--agr-t);font-weight:700">'+d.agr+'</td>';
+    h+='<td style="color:var(--req-t);font-weight:700">'+d.req+'</td>';
+    h+='<td><div class="pb-wrap"><div class="pb" style="width:'+pct+'%;background:#00875a"></div></div></td></tr>';
+  });
+  h+='</table>';
+
+  h+='<div class="sec-ttl">イベント別 織り込み件数 <span style="font-size:11px;font-weight:400;color:var(--ink3)">(クリックでマトリクスへ)</span></div>';
+  h+='<div class="ev-sum-scroll"><table class="est"><tr><th>イベント</th><th>リリース日</th><th>確定</th><th>合意</th><th>要望</th></tr>';
+  evsList.forEach(function(ev){
+    var c=byEv[ev]; if(!c||(!c.req&&!c.agr&&!c.cnf)) return;
+    var ecfg = G.events_config && G.events_config.find(function(e){ return e.name===ev; });
+    var dt = (ecfg && ecfg.app_date) || (G.app_dates && G.app_dates[ev]) || '-';
+    h+='<tr onclick="filterByEv(\''+ev+'\')" style="cursor:pointer">';
+    h+='<td style="font-weight:600;font-size:11px">'+esc(ev)+'</td><td class="s-nil">'+dt+'</td>';
+    h+=(c.cnf?'<td class="s-cnf">'+c.cnf+'</td>':'<td class="s-nil">-</td>');
+    h+=(c.agr?'<td class="s-agr">'+c.agr+'</td>':'<td class="s-nil">-</td>');
+    h+=(c.req?'<td class="s-req">'+c.req+'</td>':'<td class="s-nil">-</td>');
+    h+='</tr>';
+  });
+  h+='</table></div>';
+
+  if (warns.length) {
+    h+='<div class="sec-ttl" style="color:var(--warn)">&#9888; 締切警告 ('+warns.length+'件)</div>';
+    h+='<table class="pt"><tr><th>ID</th><th>仕様書</th><th>発行日</th><th>内容</th></tr>';
+    warns.slice(0,20).forEach(function(r){
+      var ws=getWarns(r);
+      h+='<tr onclick="showDetailById(\''+r.req_id+'\')" style="cursor:pointer">';
+      h+='<td style="font-size:10px;font-family:monospace">'+r.req_id+'</td>';
+      h+='<td style="font-size:11px">'+esc(r.cat3.replace(/^MVH-VDCTRL_/,'').slice(0,36))+'</td>';
+      h+='<td class="dt-warn">'+r.issue_date+'</td>';
+      h+='<td>'+ws.map(function(w){return '<span style="font-size:10px;color:var(--warn)">'+esc(w.ev)+'('+(w.over?'超過':'残')+Math.abs(w.diff)+'日)</span>';}).join(' ')+'</td></tr>';
+    });
+    h+='</table>';
+  }
+  document.getElementById('dashContent').innerHTML = h;
+}
+
+function filterByEv(ev) {
+  document.getElementById('fEvent').value = ev;
+  showTab(1);
+  applyF();
+}
+function showDetailById(id) {
+  var r = G.req_data.find(function(x){return x.req_id===id;});
+  if(r) showDetail(r);
+}
+
+// ===== MATRIX =====
+function buildMatHead() {
+  var evs = visibleEvents();
+  var th = '<tr>';
+  th += '<th class="f0"><div class="thb">仕様書</div><div class="col-resize-handle" id="col0handle"></div></th>';
+  th += '<th class="f1"><div class="thb">機能説明 / 発行日</div></th>';
+  evs.forEach(function(ev) {
+    var ecfg = G.events_config && G.events_config.find(function(e){ return e.name===ev; });
+    var dt = (ecfg && ecfg.app_date) || (G.app_dates && G.app_dates[ev]) || '';
+    var dls = DL_LABELS.slice(0,2).map(function(l){
+      var date = (ecfg && ecfg.deadlines && ecfg.deadlines[l]) || (G.schedules && G.schedules[l] && G.schedules[l][ev]) || '';
+      return date ? date.slice(5) : '';
+    }).filter(Boolean).join('/');
+    th += '<th class="ec"><div class="thb">';
+    th += '<span class="th-ev">'+esc(ev)+'</span>';
+    th += dt ? '<span class="th-dt">'+dt.slice(5)+'</span>' : '';
+    th += dls ? '<span class="th-dl">〆'+dls+'</span>' : '';
+    th += '</div></th>';
+  });
+  th += '</tr>';
+  document.getElementById('matHead').innerHTML = th;
+}
+
+function renderMat() {
+  buildMatHead();
+  var tbody = document.getElementById('matBody');
+  tbody.innerHTML = '';
+  pg = 0;
+  appendMatRows(tbody);
+  var view = document.getElementById('tab1');
+  view.onscroll = function(){
+    if (view.scrollTop + view.clientHeight > view.scrollHeight - 400) appendMatRows(tbody);
+  };
+}
+
+function appendMatRows(tbody) {
+  var s = pg*PSIZE, e = Math.min(s+PSIZE, filtered.length);
+  if (s >= filtered.length) return;
+  var frag = document.createDocumentFragment();
+  for (var i = s; i < e; i++) frag.appendChild(makeMatRow(filtered[i]));
+  tbody.appendChild(frag);
+  pg++;
+}
+
+function makeMatRow(r) {
+  var tr = document.createElement('tr');
+  tr.dataset.id = r.req_id;
+  if (r.req_id === selId) tr.classList.add('sel');
+  tr.onclick = function(){ showDetail(r, tr); };
+
+  var evs = visibleEvents();
+  var warns = getWarns(r);
+  var cf = cascadeFrom(r);
+  var ep = applyDependencyCascade(r);
+
+  var camBadges = expandCams(r.cameras).map(function(c){
+    return '<span class="cb '+c+'" style="color:'+camColor(c)+'">'+c+'</span>';
+  }).join('');
+
+  var specText = r.cat3.replace(/^MVH-VDCTRL_/,'');
+  var warnCls = warns.length ? ' dt-warn' : '';
+  var cells = '';
+  cells += '<td class="f0 td-spec" title="'+esc(r.cat3)+'">'+esc(specText)+'</td>';
+  cells += '<td class="f1 td-desc">'+esc(r.desc)+'<br>'
+    + '<span class="dt-b'+warnCls+'">'+r.issue_date+(warns.length?' &#9888;':'')+'</span>'
+    + '</td>';
+
+  var camFilter = document.getElementById('fCam').value;
+
+  evs.forEach(function(ev, j) {
+    var cm = ep[ev];
+    var isCasc = cf >= 0 && j > cf;
+    if (!cm || Object.keys(cm).length === 0) {
+      cells += isCasc ? '<td class="ec"><span style="color:#a5d6a7;font-size:9px">&#x2713;</span></td>' : '<td class="ec"></td>';
+      return;
+    }
+    var items = '';
+    var showCams = camFilter ? [camFilter] : expandCams(r.cameras);
+    showCams.forEach(function(cam){
+      var ci = cm[cam];
+      if (!ci || (!ci.s && !isPos(ci.v))) return;
+      var cls = SC[ci.s] || '';
+      if (ci.cascaded) cls = (cls || 'cascade') + ' cascade';
+      else if (isCasc && !ci.s) cls = 'cascade';
+      var disp = ci.v && ci.v !== '-' && ci.v !== 'ー' ? ci.v.slice(0,4) : '&#9679;';
+      items += '<div class="cev '+cls+'"><span class="cev-cam">'+cam+'</span><span class="cev-val">'+disp+'</span></div>';
+    });
+    cells += items ? '<td class="ec"><div class="cam-ev-list">'+items+'</div></td>' : '<td class="ec"></td>';
+  });
+
+  tr.innerHTML = cells;
+  return tr;
+}
+
+// ===== LIST =====
+function renderList() {
+  if (!document.getElementById('lstHead').innerHTML) {
+    document.getElementById('lstHead').innerHTML = '<tr>'
+      +'<th class="f0" style="z-index:30;background:#1a237e;color:#fff">仕様書<div class="col-resize-handle" id="col0handle2"></div></th>'
+      +'<th class="f1" style="z-index:30;background:#1a237e;color:#fff;border-right:2px solid #7986cb">機能説明 / 発行日</th>'
+      +'<th style="min-width:80px">カメラ</th>'
+      +'<th style="min-width:35px">SW</th><th style="min-width:130px">JIRA</th>'
+      +'<th style="min-width:180px">変更概要</th><th style="min-width:70px">最高ST</th>'
+      +'<th style="min-width:120px">担当者</th>'
+      +'</tr>';
+  }
+  var tb = document.getElementById('lstBody');
+  tb.innerHTML = '';
+  pg = 0;
+  appendListRows(tb);
+  var view = document.getElementById('tab2');
+  view.onscroll = function(){
+    if (view.scrollTop + view.clientHeight > view.scrollHeight - 400) appendListRows(tb);
+  };
+}
+
+function appendListRows(tb) {
+  var s = pg*PSIZE, e = Math.min(s+PSIZE, filtered.length);
+  if (s >= filtered.length) return;
+  var frag = document.createDocumentFragment();
+  for (var i = s; i < e; i++) {
+    var r = filtered[i];
+    var ms = maxStatus(r);
+    var msLabel = ['','要望','合意済み','実装確定'][ms]||'';
+    var msCls = ['','s-req','s-agr','s-cnf'][ms]||'';
+    var warns = getWarns(r);
+    var camBadges = expandCams(r.cameras).map(function(c){return '<span class="cb '+c+'" style="color:'+camColor(c)+'">'+c+'</span>';}).join('');
+    var jiraHtml = (r.jira||[]).map(jiraLink).join('');
+    var specText = r.cat3.replace(/^MVH-VDCTRL_/,'');
+    var tr = document.createElement('tr');
+    tr.style.cursor = 'pointer';
+    tr.onclick = function(rr){ return function(){ showDetail(rr, this); }; }(r);
+    tr.innerHTML = '<td class="f0 td-spec">'+esc(specText)+'</td>'
+      +'<td style="position:sticky;left:var(--col0w,260px);z-index:5;background:var(--surf);border-right:2px solid #7986cb;white-space:normal;word-break:break-all;min-width:280px;font-size:12px">'
+      +esc(r.desc)+'<br><span class="'+(warns.length?'dt-warn':'dt-b')+'">'+r.issue_date+(warns.length?' &#9888;':'')+'</span></td>'
+      +'<td><div class="cam-badges">'+camBadges+'</div></td>'
+      +'<td style="text-align:center;font-weight:700;color:'+(r.sw==='Y'?'var(--req-t)':'var(--cnf-t)')+'">'+r.sw+'</td>'
+      +'<td>'+jiraHtml+'</td>'
+      +'<td style="font-size:11px;white-space:normal;word-break:break-all;max-width:180px">'+esc(r.summary||'')+'</td>'
+      +'<td><span class="'+msCls+'" style="display:inline-block;padding:2px 5px;border-radius:3px;font-size:10px">'+msLabel+'</span></td>'
+      +'<td style="font-size:11px">'+esc((r.persons||[]).join(', '))+'</td>';
+    frag.appendChild(tr);
+  }
+  tb.appendChild(frag);
+  pg++;
+}
+
+// ===== DRAWER =====
+function showDetail(r, tr) {
+  selId = r.req_id;
+  document.querySelectorAll('tbody tr.sel').forEach(function(el){el.classList.remove('sel');});
+  if (tr) tr.classList.add('sel');
+  document.getElementById('drId').textContent = r.req_id;
+  var camStr = expandCams(r.cameras).map(function(c){return '<b style="color:'+camColor(c)+'">'+c+'</b>';}).join('&#xb7;');
+  document.getElementById('drCam').innerHTML = camStr + '&nbsp;&nbsp;' + esc((r.persons||[]).join(', '));
+  document.getElementById('drTitle').textContent = r.desc;
+
+  var warns = getWarns(r);
+  var warnHtml = warns.map(function(w){
+    return '<div class="warn-box">&#9888; <b>'+esc(w.ev)+'</b> 仕様〆まで'+(w.over?'<span style="color:var(--red)">超過'+Math.abs(w.diff)+'日</span>':w.diff+'日')+'</div>';
+  }).join('');
+
+  var jiraHtml = (r.jira||[]).length
+    ? (r.jira||[]).map(jiraLink).join('')
+    : '<span style="color:var(--ink3);font-size:11px">なし</span>';
+
+  var evsList = visibleEvents();
+  var evRows = '';
+  evsList.forEach(function(ev){
+    var cm = r.event_plan && r.event_plan[ev];
+    if (!cm) return;
+    var cams = Object.entries(cm).filter(function(kv){return kv[1]&&(kv[1].s||isPos(kv[1].v));});
+    if (!cams.length) return;
+    var maxSt = cams.reduce(function(mx,kv){
+      var rk={confirmed:3,agreed:2,request:1}[kv[1].s]||0; return rk>mx?rk:mx;
+    }, 0);
+    var cls = ['','req','agr','cnf'][maxSt]||'';
+    var ecfg = G.events_config && G.events_config.find(function(e){ return e.name===ev; });
+    var dt = (ecfg && ecfg.app_date) || (G.app_dates && G.app_dates[ev]) || '';
+    var dtHtml = dt ? '<span style="font-size:9px;color:var(--ink3);margin-left:4px">'+dt+'</span>' : '';
+    evRows += '<div class="ev-dr-row '+cls+'">';
+    evRows += '<div class="ev-name">'+esc(ev)+dtHtml+'</div>';
+    evRows += '<div class="ev-dr-cams">';
+    cams.forEach(function(kv){
+      var c=kv[0],ci=kv[1];
+      evRows += '<div class="ev-dr-cam"><span class="cam" style="color:'+camColor(c)+'">'+c+'</span><span>'+esc(ci.v||'')+'</span><span style="font-size:9px;color:var(--ink3);margin-left:2px">'+(SL[ci.s]||'')+'</span></div>';
+    });
+    evRows += '</div></div>';
+  });
+
+  document.getElementById('drBody').innerHTML = warnHtml
+    + '<div class="ds"><div class="dl">仕様書</div><div class="dv dv-mono">'+(r.ver?'['+r.ver+'] ':'')+esc(r.cat3)+'</div></div>'
+    + (r.issue_date?'<div class="ds"><div class="dl">発行日</div><div class="dv">'+r.issue_date+'</div></div>':'')
+    + '<div class="ds"><div class="dl">分類</div><div class="dv">'+esc(r.cat1)+' / '+esc(r.cat2)+'</div></div>'
+    + (r.soc?'<div class="ds"><div class="dl">SoC</div><div class="dv">'+esc(r.soc)+'</div></div>':'')
+    + (r.subteam?'<div class="ds"><div class="dl">SubTeam</div><div class="dv">'+esc(r.subteam)+'</div></div>':'')
+    + (r.req_person?'<div class="ds"><div class="dl">要件担当者</div><div class="dv" style="font-weight:700">'+esc(r.req_person)+'</div></div>':'')
+    + (r.sw?'<div class="ds"><div class="dl">SW挙動変更</div><div class="dv" style="font-weight:700;color:'+(r.sw==='Y'?'var(--req-t)':'var(--cnf-t)')+'">'+r.sw+'</div></div>':'')
+    + (r.summary?'<div class="ds"><div class="dl">変更概要</div><div class="dv">'+esc(r.summary)+'</div></div>':'')
+    + '<div class="ds"><div class="dl">JIRAチケット</div><div class="dv">'+jiraHtml+'</div></div>'
+    + '<div class="ds"><div class="dl">イベント別織り込み状況</div><div class="ev-detail-list">'+(evRows||'<span style="color:var(--ink3);font-size:11px">未計画</span>')+'</div></div>';
+
+  document.getElementById('drawer').classList.add('open');
+}
+
+function closeDrawer() {
+  document.getElementById('drawer').classList.remove('open');
+  document.querySelectorAll('tbody tr.sel').forEach(function(el){el.classList.remove('sel');});
+  selId = null;
+}
+
+function openEditCurrent() { if (selId) openEdit(selId); }
+
+// ===== MODAL: 要件編集/追加 =====
+function openEdit(id) {
+  var r = G.req_data.find(function(x){return x.req_id===id;});
+  editTarget = r || null;
+  document.getElementById('mTitle').textContent = r ? '編集: '+r.req_id : '新規要件を追加';
+  document.getElementById('btnDel').style.display = r ? '' : 'none';
+  buildModal(r);
+  document.getElementById('mBg').classList.remove('hid');
+}
+function openAdd() { openEdit(null); }
+
+function buildModal(r) {
+  function v(k){ return r?(r[k]||''):''; }
+  var cats = [...new Set(G.req_data.map(function(x){return x.cat1;}).filter(Boolean))].sort();
+  var allCams = G.cameras || CAM_SHORT;
+  var evsList = visibleEvents();
+
+  var camChecks = allCams.map(function(c){
+    var checked = r && (r.cameras||[]).includes(c) ? 'checked' : '';
+    return '<label style="display:flex;align-items:center;gap:3px;font-size:11px;cursor:pointer"><input type="checkbox" class="cam-chk" value="'+c+'" '+checked+'><span class="cb '+c+'" style="color:'+camColor(c)+'">'+c+'</span></label>';
+  }).join('');
+
+  var evInputs = evsList.map(function(ev){
+    var cm = r && r.event_plan && r.event_plan[ev];
+    var camRows = allCams.map(function(cam){
+      var ci = cm && cm[cam];
+      return '<div class="cam-row"><label>'+cam+'</label>'
+        +'<input class="ev-val" data-ev="'+ev+'" data-cam="'+cam+'" type="text" value="'+(ci?esc(ci.v||''):'')+'" placeholder="-">'
+        +'<select class="ev-st" data-ev="'+ev+'" data-cam="'+cam+'">'
+        +'<option value="" '+(ci&&ci.s?'':'selected')+'>-</option>'
+        +'<option value="request" '+(ci&&ci.s==='request'?'selected':'')+'>要望</option>'
+        +'<option value="agreed" '+(ci&&ci.s==='agreed'?'selected':'')+'>合意済</option>'
+        +'<option value="confirmed" '+(ci&&ci.s==='confirmed'?'selected':'')+'>確定</option>'
+        +'</select></div>';
+    }).join('');
+    var ecfg = G.events_config && G.events_config.find(function(e){ return e.name===ev; });
+    var dt = (ecfg && ecfg.app_date) || (G.app_dates && G.app_dates[ev]) || '';
+    return '<div class="ev-item"><div class="ev-item-name" title="'+esc(ev)+(dt?' ('+dt+')':'')+'">'+esc(ev)+'</div><div class="cam-ev-inputs">'+camRows+'</div></div>';
+  }).join('');
+
+  document.getElementById('mBody').innerHTML =
+    '<div class="form-row">'
+    +'<div class="field"><label>管理ID</label><input id="m_id" value="'+esc(v('req_id'))+'" placeholder="自動採番"></div>'
+    +'<div class="field"><label>SoC</label><input id="m_soc" value="'+esc(v('soc'))+'"></div>'
+    +'</div>'
+    +'<div class="field"><label>対象カメラ（複数可）</label><div style="display:flex;gap:10px;flex-wrap:wrap;padding:4px 0">'+camChecks+'</div></div>'
+    +'<div class="form-row">'
+    +'<div class="field"><label>大分類</label><select id="m_cat1"><option value="">選択...</option>'
+    +cats.map(function(c){return '<option '+(c===v('cat1')?'selected':'')+'>'+esc(c)+'</option>';}).join('')
+    +'</select></div>'
+    +'<div class="field"><label>中分類</label><input id="m_cat2" value="'+esc(v('cat2'))+'"></div>'
+    +'</div>'
+    +'<div class="field"><label>仕様書ファイル名</label><input id="m_cat3" value="'+esc(v('cat3'))+'"></div>'
+    +'<div class="form-row">'
+    +'<div class="field"><label>発行日</label><input id="m_date" type="date" value="'+v('issue_date')+'"></div>'
+    +'<div class="field"><label>SW挙動変更</label><select id="m_sw"><option value="">未選択</option><option '+(v('sw')==='Y'?'selected':'')+' value="Y">Y</option><option '+(v('sw')==='N'?'selected':'')+' value="N">N</option></select></div>'
+    +'</div>'
+    +'<div class="field"><label>機能説明</label><textarea id="m_desc">'+esc(v('desc'))+'</textarea></div>'
+    +'<div class="form-row">'
+    +'<div class="field"><label>要件担当者 <span style="color:var(--ink3);font-weight:400">（フィルタ対象・1名）</span></label><input id="m_req_person" value="'+esc(v('req_person'))+'" placeholder="例: 小林"></div>'
+    +'<div class="field"><label>JIRAチケット（カンマ区切り）</label><input id="m_jira" value="'+esc((r&&r.jira||[]).join(','))+'"></div>'
+    +'</div>'
+    +'<div class="field"><label>変更概要</label><textarea id="m_summary">'+esc(v('summary'))+'</textarea></div>'
+    +'<details style="margin-top:4px"><summary style="cursor:pointer;font-size:12px;font-weight:700;color:var(--ink2);padding:4px 0">イベント別 織り込み状況（全'+evsList.length+'イベント×カメラ）</summary>'
+    +'<div class="ev-grid" style="margin-top:8px">'+evInputs+'</div></details>'
+    +'<div style="margin-top:8px;padding:8px;background:#f0f4ff;border-radius:4px;font-size:11px;border:1px solid #c5cae9">'
+    +'<label class="chk-jira"><input type="checkbox" id="chkJira" onchange="updateJiraPreview()"> JIRA課題を自動作成する'
+    +(r&&r.jira_auto_created?' <a class="jchip" href="'+JIRA_BASE+r.jira_auto_created+'" target="_blank">'+r.jira_auto_created+'</a>':'')+' '
+    +'</label>'
+    +'<div style="margin-top:6px;display:grid;grid-template-columns:1fr 1fr;gap:6px">'
+    +'<div class="field"><label>納入フェーズ <span style="color:var(--ink3)">→ JIRAの「納入フェーズ（選択肢）」と「Epic Link」を設定</span></label>'
+    +'<select id="m_jira_phase" onchange="updateJiraPreview()">'
+    +'<option value="">自動判定（イベント計画の最初のフェーズ）</option>'
+    +'<option value="VN-HILS">VN-HILS</option>'
+    +'<option value="SYS1_P1A1">SYS1_P1A1</option>'
+    +'<option value="SYS1_P1A2">SYS1_P1A2</option>'
+    +'<option value="SYS2_P1A1">SYS2_P1A1</option>'
+    +'<option value="SYS2_P2A2">SYS2_P2A2</option>'
+    +'<option value="SYS3_P1A1">SYS3_P1A1</option>'
+    +'<option value="SYS3_P1A2">SYS3_P1A2</option>'
+    +'<option value="SYS3_P2A2">SYS3_P2A2</option>'
+    +'<option value="PreFOT">PreFOT</option>'
+    +'<option value="FOT">FOT</option>'
+    +'<option value="FS-CS">FS-CS</option>'
+    +'<option value="SYS4_P1A1">SYS4_P1A1</option>'
+    +'<option value="SYS4_P2">SYS4_P2</option>'
+    +'<option value="電子CV">電子CV</option>'
+    +'<option value="CV">CV</option>'
+    +'</select></div>'
+    +'<div class="field"><label>担当者JIRAアカウント名（省略可） <span style="color:var(--ink3)">→ JIRAの「担当者」</span></label>'
+    +'<input id="m_jira_assignee" placeholder="例: kazuhiko.kobayashi.j3j@jp.denso.com" value="'+esc(r&&r.jira_assignee||'')+'" oninput="updateJiraPreview()"></div>'
+    +'</div>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px">'
+    +'<div class="field"><label>開始日 <span style="color:var(--ink3)">→ JIRAの「開始日」（空欄=発行日を使用）</span></label>'
+    +'<input id="m_jira_start" type="date" value="'+esc(r&&r.jira_start||'')+'" oninput="updateJiraPreview()"></div>'
+    +'<div class="field"><label>期限 <span style="color:var(--ink3)">→ JIRAの「期限」</span></label>'
+    +'<input id="m_jira_due" type="date" value="'+esc(r&&r.jira_due||'')+'" oninput="updateJiraPreview()"></div>'
+    +'</div>'
+    +'<div class="jira-preview" id="jiraPreview">'
+    +'<div class="jp-titlebar"><span class="jp-issuetype">&#9632; ストーリー</span><span>BEV26EGSD – 作成プレビュー</span></div>'
+    +'<div class="jp-body" id="jiraPreviewBody"></div>'
+    +'</div>'
+    +'</div>';
+
+  document.getElementById('jiraNote').textContent = '';
+}
+
+function closeModal() { document.getElementById('mBg').classList.add('hid'); }
+
+// ===== JIRA PREVIEW =====
+var PHASE_EPIC_MAP = {
+  'VN-HILS':   'BEV26EGSD-164', 'SYS1_P1A1': 'BEV26EGSD-165', 'SYS1_P1A2': 'BEV26EGSD-165',
+  'SYS2_P1A1': 'BEV26EGSD-290', 'SYS2_P2A2': 'BEV26EGSD-290',
+  'SYS3_P1A1': 'BEV26EGSD-291', 'SYS3_P1A2': 'BEV26EGSD-291', 'SYS3_P2A2': 'BEV26EGSD-291',
+};
+var PHASE_EPIC_NAMES = {
+  'BEV26EGSD-164': '【要件管理】VN-HILS_要件管理チケット集約',
+  'BEV26EGSD-165': '【要件管理】SYS1_要件管理チケット集約',
+  'BEV26EGSD-290': '【要件管理】SYS2_要件管理チケット集約',
+  'BEV26EGSD-291': '【要件管理】SYS3_要件管理チケット集約',
+};
+
+function gv2(id){ var el=document.getElementById(id); return el?el.value.trim():''; }
+
+function updateJiraPreview() {
+  var chk = document.getElementById('chkJira');
+  var prev = document.getElementById('jiraPreview');
+  if (!chk || !prev) return;
+  if (!chk.checked) { prev.classList.remove('show'); return; }
+  prev.classList.add('show');
+
+  var cat2   = gv2('m_cat2') || gv2('m_cat1') || '';
+  var cat3   = gv2('m_cat3');
+  var desc   = gv2('m_desc');
+  var summary_txt = gv2('m_summary');
+  var issueDate = gv2('m_date');
+  var sw     = gv2('m_sw');
+  var assignee = gv2('m_jira_assignee');
+  var phaseOverride = gv2('m_jira_phase');
+  var jiraStart = gv2('m_jira_start');
+  var jiraDue = gv2('m_jira_due');
+  var cameras = [...document.querySelectorAll('.cam-chk:checked')].map(function(el){return el.value;});
+
+  // summary
+  var jiraSummary = '[' + (cat2||'機能名') + ']' + (desc||'機能説明');
+
+  // phase auto-detect from event plan inputs
+  var phase = phaseOverride;
+  if (!phase) {
+    var phaseOrder = ['VN-HILS','SYS1_P1A1','SYS1_P1A2','SYS2_P1A1','SYS2_P2A2','SYS3_P1A1','SYS3_P1A2','SYS3_P2A2','PreFOT','FOT','FS-CS','SYS4_P1A1','SYS4_P2','電子CV','CV'];
+    for (var pi=0; pi<phaseOrder.length; pi++) {
+      var ev = phaseOrder[pi];
+      var valInp = document.querySelector('.ev-val[data-ev="'+ev+'"]');
+      var stInp  = document.querySelector('.ev-st[data-ev="'+ev+'"]');
+      if ((valInp && valInp.value.trim() && valInp.value.trim() !== '-') || (stInp && stInp.value)) {
+        phase = ev; break;
+      }
+    }
+  }
+
+  var epicKey  = PHASE_EPIC_MAP[phase] || null;
+  var epicName = epicKey ? PHASE_EPIC_NAMES[epicKey] || epicKey : null;
+
+  // labels
+  var labels = [];
+  if (phase) labels.push(phase);
+  if (sw === 'Y') labels.push('ソフト影響あり');
+  else if (sw === 'N') labels.push('ソフト影響なし');
+
+  // description preview
+  var cat3short = cat3.replace(/^MVH-VDCTRL_/,'');
+  var cat1v = gv2('m_cat1');
+  var descPreview = '■要件概要\n' + (summary_txt || desc || '') + '\n\n'
+    + '■仕様書情報\n仕様書: ' + cat3 + '\n版数: ' + gv2('m_cat3').match(/STD[-_](\d+)/) ? '' : '' + '\n発行日: ' + issueDate + '\n対象カメラ: ' + cameras.join(', ') + '\nSW挙動変更: ' + sw + '\n\n'
+    + '■ADC要件リスト\n||機能大分類||中分類||小分類||\n|' + cat1v + '|' + cat2 + '|' + cat3short + '|';
+
+  // build preview HTML
+  var h = '';
+  h += '<div class="jp-summary">' + esc(jiraSummary) + '</div>';
+  h += '<div class="jp-fields">';
+
+  function field(label, val, src, missing) {
+    return '<div class="jp-field"><div class="jp-fl">'+label+'</div>'
+      + '<div class="jp-fv'+(missing?' missing':'')+'">'+val+'</div>'
+      + (src ? '<div style="font-size:9px;color:var(--ink3)">← '+src+'</div>' : '')
+      + '</div>';
+  }
+  h += field('タイプ', 'ストーリー', '固定');
+  h += field('プロジェクト', 'BEV26EGSD', '固定');
+  h += field('納入フェーズ（選択肢）', phase||'<i>未設定（イベント計画から自動判定）</i>', 'イベント計画の最初のフェーズ', !phase);
+  h += field('Epic Link', epicKey ? (epicKey + ' ' + (epicName||'')) : '<i>対象外（SYS3/SYS4/FOT等のみ設定）</i>', 'フェーズから自動', !epicKey);
+  h += field('ラベル', labels.length
+    ? labels.map(function(l){return '<span class="jp-label">'+esc(l)+'</span>';}).join(' ')
+    : '<i>なし</i>', 'フェーズ + SW変更フラグ', !labels.length);
+  h += field('担当者', assignee || '<i>未設定</i>', '担当者フィールド', !assignee);
+  var startDisplay = jiraStart || issueDate;
+  h += field('開始日', startDisplay || '<i>未設定</i>', jiraStart ? '開始日フィールド' : '発行日フィールド（開始日未指定のため）', !startDisplay);
+  h += field('期限', jiraDue || '<i>未設定</i>', '期限フィールド', false);
+  h += '</div>';
+  h += '<div style="font-size:10px;font-weight:700;color:var(--ink2);margin-top:6px;margin-bottom:2px">説明（descriptionフィールド）</div>';
+  h += '<div class="jp-desc">' + esc(descPreview) + '</div>';
+
+  var warns = [];
+  if (!desc) warns.push('「機能説明」が未入力。summary が空になります');
+  if (!phase) warns.push('イベント計画に値がないため納入フェーズを自動判定できません。手動で選択してください');
+  if (!sw) warns.push('「SW挙動変更」未選択。ラベル（ソフト影響あり/なし）が設定されません');
+  if (warns.length) {
+    h += '<div class="jp-warn">&#9888; ' + warns.map(esc).join('<br>&#9888; ') + '</div>';
+  }
+
+  document.getElementById('jiraPreviewBody').innerHTML = h;
+}
+
+async function saveReq() {
+  function gv(id){ var el=document.getElementById(id); return el?el.value.trim():''; }
+  var cameras = [...document.querySelectorAll('.cam-chk:checked')].map(function(el){return el.value;});
+  var event_plan = {};
+  document.querySelectorAll('.ev-val').forEach(function(inp){
+    var ev=inp.dataset.ev, cam=inp.dataset.cam, val=inp.value.trim();
+    var st = (document.querySelector('.ev-st[data-ev="'+ev+'"][data-cam="'+cam+'"]')||{}).value || null;
+    if (val || st) {
+      if (!event_plan[ev]) event_plan[ev] = {};
+      event_plan[ev][cam] = {v: val, s: st||null};
+    }
+  });
+  var cat3 = gv('m_cat3');
+  var vm = cat3.match(/STD[-_](\d+)/);
+  var body = {
+    req_id: gv('m_id'),
+    cameras: cameras,
+    cat1: gv('m_cat1'),
+    cat2: gv('m_cat2'),
+    cat3: cat3,
+    ver: vm ? 'v'+vm[1] : '',
+    desc: gv('m_desc'),
+    issue_date: gv('m_date'),
+    soc: gv('m_soc'),
+    sw: gv('m_sw'),
+    summary: gv('m_summary'),
+    req_person: gv('m_req_person'),
+    jira: gv('m_jira').split(',').map(function(s){return s.trim();}).filter(Boolean),
+    event_plan: event_plan,
+    create_jira: document.getElementById('chkJira') && document.getElementById('chkJira').checked,
+    jira_phase: gv('m_jira_phase'),
+    jira_assignee: gv('m_jira_assignee'),
+    jira_start: gv('m_jira_start'),
+    jira_due: gv('m_jira_due'),
+  };
+
+  document.getElementById('jiraNote').textContent = '保存中...';
+  try {
+    var result;
+    if (editTarget) {
+      result = await api('PUT', '/api/requirements/'+editTarget.req_id, body);
+      var idx = G.req_data.findIndex(function(x){return x.req_id===editTarget.req_id;});
+      if (idx>=0) G.req_data[idx] = result;
+    } else {
+      result = await api('POST', '/api/requirements', body);
+      G.req_data.push(result);
+    }
+    if (result.jira_created) {
+      document.getElementById('jiraNote').className = 'jira-note ok';
+      document.getElementById('jiraNote').textContent = 'JIRA作成: ' + result.jira_created;
+      await new Promise(function(r){setTimeout(r,1200);});
+    }
+    closeModal();
+    applyF();
+    if (result.req_id) showDetail(result);
+  } catch(e) {
+    document.getElementById('jiraNote').textContent = 'エラー: ' + e.message;
+  }
+}
+
+async function deleteReq() {
+  if (!editTarget || !confirm('削除しますか? ' + editTarget.req_id)) return;
+  await api('DELETE', '/api/requirements/'+editTarget.req_id);
+  G.req_data = G.req_data.filter(function(x){return x.req_id!==editTarget.req_id;});
+  closeModal();
+  closeDrawer();
+  applyF();
+}
+
+// ===== EVENT MANAGEMENT MODAL =====
+function openEvMgmt() {
+  currentEvTab = 0;
+  document.getElementById('evPane0').style.display = '';
+  document.getElementById('evPane1').style.display = 'none';
+  document.getElementById('evTab0').classList.add('active');
+  document.getElementById('evTab1').classList.remove('active');
+  buildEvMgmtList();
+  document.getElementById('evMgmtBg').classList.remove('hid');
+}
+function closeEvMgmt() { document.getElementById('evMgmtBg').classList.add('hid'); }
+
+function switchEvTab(n) {
+  currentEvTab = n;
+  document.getElementById('evPane0').style.display = n===0 ? '' : 'none';
+  document.getElementById('evPane1').style.display = n===1 ? 'flex' : 'none';
+  document.getElementById('evTab0').classList.toggle('active', n===0);
+  document.getElementById('evTab1').classList.toggle('active', n===1);
+  if (n===1) buildDepTree();
+}
+
+function renderDepGraph() {
+  var cfg = G.events_config || [];
+  if (!cfg.length) return;
+  var NODE_W = 130, NODE_H = 34, COL_GAP = 80, ROW_GAP = 16, PAD = 20;
+
+  // Build parent map from cfg (already updated by onDepParentChange)
+  var parentMap = {};
+  cfg.forEach(function(ev) { parentMap[ev.name] = ev.parent || null; });
+  // live overrides from selects
+  document.querySelectorAll('#depSideList .parent-sel').forEach(function(sel) {
+    parentMap[sel.dataset.name] = sel.value || null;
+  });
+
+  var names = cfg.map(function(e){ return e.name; });
+  {
+
+    // assign column depth via BFS from roots
+    var depth = {};
+    names.forEach(function(n){ depth[n] = 0; });
+    var changed = true;
+    while (changed) {
+      changed = false;
+      names.forEach(function(n){
+        var p = parentMap[n];
+        if (p && depth[p] !== undefined) {
+          var want = depth[p] + 1;
+          if (want > depth[n]) { depth[n] = want; changed = true; }
+        }
+      });
+    }
+
+    // group by column
+    var cols = {};
+    names.forEach(function(n){
+      var c = depth[n];
+      if (!cols[c]) cols[c] = [];
+      cols[c].push(n);
+    });
+    var colKeys = Object.keys(cols).map(Number).sort(function(a,b){return a-b;});
+
+    // assign x,y positions
+    var pos = {};
+    colKeys.forEach(function(c, ci){
+      var nodes = cols[c];
+      nodes.forEach(function(n, ri){
+        pos[n] = {
+          x: PAD + ci * (NODE_W + COL_GAP),
+          y: PAD + ri * (NODE_H + ROW_GAP)
+        };
+      });
+    });
+
+    var maxX = 0, maxY = 0;
+    names.forEach(function(n){ maxX = Math.max(maxX, pos[n].x + NODE_W); maxY = Math.max(maxY, pos[n].y + NODE_H); });
+    var svgW = maxX + PAD, svgH = maxY + PAD;
+
+    var svgNS = 'http://www.w3.org/2000/svg';
+    var svg = document.getElementById('depGraphSvg');
+    // fit to container width if graph is smaller, scroll if larger
+    var wrap = document.getElementById('depGraphScroll');
+    var wrapW = wrap.clientWidth || svgW;
+    svg.setAttribute('width', Math.max(svgW, wrapW));
+    svg.setAttribute('height', svgH);
+    svg.innerHTML = '';
+
+    // arrowhead marker
+    var defs = document.createElementNS(svgNS, 'defs');
+    defs.innerHTML = '<marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#5c7cfa"/></marker>'
+      + '<marker id="arrowhead-hidden" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0, 8 3, 0 6" fill="#bbb"/></marker>';
+    svg.appendChild(defs);
+
+    // draw edges first (behind nodes)
+    names.forEach(function(n){
+      var p = parentMap[n];
+      if (!p || !pos[p]) return;
+      var px = pos[p], cx = pos[n];
+      var x1 = px.x + NODE_W, y1 = px.y + NODE_H/2;
+      var x2 = cx.x,          y2 = cx.y + NODE_H/2;
+      var mx = (x1 + x2) / 2;
+      var pHidden = cfg.find(function(e){return e.name===p;});
+      var cHidden = cfg.find(function(e){return e.name===n;});
+      var isHidden = (pHidden && pHidden.visible===false) || (cHidden && cHidden.visible===false);
+      var path = document.createElementNS(svgNS, 'path');
+      path.setAttribute('d', 'M'+x1+','+y1+' C'+mx+','+y1+' '+mx+','+y2+' '+x2+','+y2);
+      path.setAttribute('class', 'g-edge'+(isHidden?' g-hidden-edge':''));
+      if (isHidden) path.setAttribute('marker-end', 'url(#arrowhead-hidden)');
+      else path.setAttribute('marker-end', 'url(#arrowhead)');
+      svg.appendChild(path);
+    });
+
+    // draw nodes
+    names.forEach(function(n){
+      var p = pos[n];
+      var evCfg = cfg.find(function(e){return e.name===n;});
+      var isRoot = !parentMap[n];
+      var isHidden = evCfg && evCfg.visible === false;
+      var g = document.createElementNS(svgNS, 'g');
+      g.setAttribute('class', 'g-node'+(isRoot?' g-root':'')+(isHidden?' g-hidden':''));
+      g.setAttribute('transform', 'translate('+p.x+','+p.y+')');
+
+      // node height: 2 lines if hidden badge
+      var nodeH = isHidden ? NODE_H + 14 : NODE_H;
+      var rect = document.createElementNS(svgNS, 'rect');
+      rect.setAttribute('width', NODE_W); rect.setAttribute('height', nodeH);
+      rect.setAttribute('rx', 6); rect.setAttribute('ry', 6);
+
+      var text = document.createElementNS(svgNS, 'text');
+      text.setAttribute('x', NODE_W/2);
+      text.setAttribute('y', isHidden ? NODE_H/2 : NODE_H/2+4);
+      text.setAttribute('text-anchor', 'middle');
+      text.setAttribute('dominant-baseline', 'middle');
+      text.textContent = n;
+
+      g.appendChild(rect);
+      g.appendChild(text);
+
+      if (isHidden) {
+        var badge = document.createElementNS(svgNS, 'text');
+        badge.setAttribute('x', NODE_W/2);
+        badge.setAttribute('y', NODE_H/2 + 13);
+        badge.setAttribute('text-anchor', 'middle');
+        badge.setAttribute('font-size', '9');
+        badge.setAttribute('fill', '#aaa');
+        badge.textContent = '非表示';
+        g.appendChild(badge);
+      }
+
+      svg.appendChild(g);
+    });
+  }
+}
+
+function buildDepTree() {
+  var cfg = G.events_config || [];
+  if (!cfg.length) {
+    document.getElementById('depGraphSvg').innerHTML = '';
+    document.getElementById('depSideList').innerHTML = '<div style="color:var(--ink3);font-size:11px">イベントが登録されていません</div>';
+    return;
+  }
+  // side list for parent assignment
+  var sideH = '';
+  cfg.forEach(function(ev, idx) {
+    var opts = '<option value="">（なし）</option>';
+    cfg.forEach(function(other) {
+      if (other.name === ev.name) return;
+      var sel = (ev.parent === other.name) ? 'selected' : '';
+      opts += '<option value="'+esc(other.name)+'" '+sel+'>'+esc(other.name)+'</option>';
+    });
+    sideH += '<div class="dep-row">'
+      + '<span class="dep-row-name" title="'+esc(ev.name)+'">'+esc(ev.name)+'</span>'
+      + '<select class="parent-sel" data-name="'+esc(ev.name)+'" data-idx="'+idx+'" onchange="onDepParentChange(this)">'
+      + opts + '</select></div>';
+  });
+  document.getElementById('depSideList').innerHTML = sideH;
+  renderDepGraph();
+}
+
+function onDepParentChange(sel) {
+  var idx = parseInt(sel.dataset.idx);
+  if (G.events_config && G.events_config[idx]) {
+    G.events_config[idx].parent = sel.value || null;
+  }
+  renderDepGraph();
+}
+
+function buildEvMgmtList() {
+  var cfg = G.events_config || (G.events||[]).map(function(n){
+    return {name:n, app_date:'', visible:true, deadlines:{}};
+  });
+  var h = '';
+  cfg.forEach(function(ev, idx) {
+    var vis = ev.visible !== false;
+    var dls = DL_LABELS.map(function(l){
+      var val = (ev.deadlines && ev.deadlines[l]) || '';
+      return '<div class="ev-dl-item"><label>'+esc(l)+'</label><input type="date" class="ev-dl-inp" data-idx="'+idx+'" data-label="'+esc(l)+'" value="'+val+'"></div>';
+    }).join('');
+    h += '<div class="ev-mgmt-row'+(vis?'':' hidden-ev')+'" id="evrow_'+idx+'">';
+    h += '<button class="btn-hide-ev" data-idx="'+idx+'" onclick="toggleEvVis(this)">'+(vis?'非表示':'表示')+'</button>';
+    h += '<input type="text" class="ev-name-inp" data-idx="'+idx+'" value="'+esc(ev.name)+'">';
+    h += '<input type="date" class="ev-date-inp" data-idx="'+idx+'" value="'+esc(ev.app_date||'')+'" placeholder="リリース日">';
+    h += '<div class="ev-dl-grid">'+dls+'</div>';
+    h += '<button class="btn-del-ev" onclick="deleteEvRow('+idx+')">削除</button>';
+    h += '</div>';
+  });
+  document.getElementById('evMgmtList').innerHTML = h;
+}
+
+function toggleEvVis(btn) {
+  var row = document.getElementById('evrow_'+btn.dataset.idx);
+  var isHidden = row.classList.toggle('hidden-ev');
+  btn.textContent = isHidden ? '表示' : '非表示';
+}
+
+function deleteEvRow(idx) {
+  var row = document.getElementById('evrow_'+idx);
+  if (row) row.remove();
+}
+
+function addEvent() {
+  var name = document.getElementById('newEvName').value.trim();
+  if (!name) return;
+  var date = document.getElementById('newEvDate').value;
+  var newEv = {name: name, app_date: date, visible: true, deadlines: {}};
+  if (!G.events_config) G.events_config = [];
+  G.events_config.push(newEv);
+  document.getElementById('newEvName').value = '';
+  document.getElementById('newEvDate').value = '';
+  buildEvMgmtList();
+  document.getElementById('evMgmtList').scrollTop = 99999;
+}
+
+async function saveEvMgmt() {
+  var rows = document.querySelectorAll('#evMgmtList .ev-mgmt-row');
+  var newCfg = [];
+  rows.forEach(function(row) {
+    var idx = parseInt(row.id.replace('evrow_',''));
+    var nameInp = row.querySelector('.ev-name-inp');
+    var dateInp = row.querySelector('.ev-date-inp');
+    var hideBtn = row.querySelector('.btn-hide-ev');
+    var name = nameInp ? nameInp.value.trim() : '';
+    if (!name) return;
+    var deadlines = {};
+    row.querySelectorAll('.ev-dl-inp').forEach(function(inp){
+      if (inp.value) deadlines[inp.dataset.label] = inp.value;
+    });
+    var existing = G.events_config && G.events_config.find(function(e){ return e.name===name; });
+    newCfg.push({
+      name: name,
+      app_date: dateInp ? dateInp.value : '',
+      visible: !row.classList.contains('hidden-ev'),
+      deadlines: deadlines,
+      parent: existing ? (existing.parent || null) : null
+    });
+  });
+
+  // Merge parent values from dependency graph side list if it was opened
+  var parentSels = document.querySelectorAll('#depSideList .parent-sel');
+  if (parentSels.length) {
+    parentSels.forEach(function(sel) {
+      var name = sel.dataset.name;
+      var destEv = newCfg.find(function(e){ return e.name === name; });
+      if (destEv) destEv.parent = sel.value || null;
+    });
+  }
+
+  document.getElementById('evMgmtNote').textContent = '保存中...';
+  try {
+    var result = await api('PUT', '/api/events', newCfg);
+    G.events_config = result;
+    G.events = result.map(function(e){return e.name;});
+    // フィルタのイベントリスト更新
+    var fev = document.getElementById('fEvent');
+    var prevVal = fev.value;
+    fev.innerHTML = '<option value="">全て</option>';
+    visibleEvents().forEach(function(ev){
+      var o = document.createElement('option');
+      o.value = o.textContent = ev;
+      fev.appendChild(o);
+    });
+    fev.value = prevVal;
+    closeEvMgmt();
+    applyF();
+  } catch(e) {
+    document.getElementById('evMgmtNote').textContent = 'エラー: ' + e.message;
+  }
+}
+
+// ===== Tooltip =====
+document.addEventListener('mouseover', function(e){
+  var td = e.target.closest('td.ec');
+  if (!td) return;
+  var tr = td.closest('tr'); if (!tr||!tr.dataset.id) return;
+  var r = G.req_data.find(function(x){return x.req_id===tr.dataset.id;}); if (!r) return;
+  var tds = [...tr.querySelectorAll('td')];
+  var idx = tds.indexOf(td) - 2;
+  var ev = visibleEvents()[idx]; if (!ev) return;
+  var cm = r.event_plan && r.event_plan[ev];
+  var camStr = cm ? Object.entries(cm).filter(function(kv){return kv[1]&&(kv[1].s||isPos(kv[1].v));})
+    .map(function(kv){return kv[0]+': '+kv[1].v+(kv[1].s?' ('+SL[kv[1].s]+')':'');}).join('\n') : '―';
+  var ecfg = G.events_config && G.events_config.find(function(e){ return e.name===ev; });
+  var dls = DL_LABELS.map(function(l){
+    var date = (ecfg && ecfg.deadlines && ecfg.deadlines[l]) || (G.schedules && G.schedules[l] && G.schedules[l][ev]) || '';
+    return date ? l.slice(0,2)+':'+date : '';
+  }).filter(Boolean).join(' / ');
+  var appDate = (ecfg && ecfg.app_date) || (G.app_dates && G.app_dates[ev]) || '';
+  var tip = document.getElementById('tip');
+  tip.textContent = ev + (appDate?' '+appDate:'') + '\n' + camStr + (dls?'\n仕様〆: '+dls:'');
+  tip.style.display = 'block';
+});
+document.addEventListener('mousemove', function(e){
+  var t=document.getElementById('tip'); t.style.left=(e.clientX+12)+'px'; t.style.top=(e.clientY+8)+'px';
+});
+document.addEventListener('mouseout', function(e){ if(!e.target.closest('td.ec')) document.getElementById('tip').style.display='none'; });
+document.addEventListener('click', function(e){
+  if(!e.target.closest('.drawer')&&!e.target.closest('tbody tr')&&!e.target.closest('.modal')) closeDrawer();
+});
+document.getElementById('mBg').addEventListener('click', function(e){ if(e.target===this) closeModal(); });
+document.getElementById('evMgmtBg').addEventListener('click', function(e){ if(e.target===this) closeEvMgmt(); });
+
+init();
+
+// ===== 列幅リサイズ =====
+(function() {
+  var startX, startW, dragging = false;
+  function getHandles() {
+    return [document.getElementById('col0handle'), document.getElementById('col0handle2')].filter(Boolean);
+  }
+  function setWidth(w) {
+    w = Math.max(80, Math.min(600, w));
+    document.documentElement.style.setProperty('--col0w', w + 'px');
+    document.querySelectorAll('.f0').forEach(function(el){
+      el.style.minWidth = w + 'px';
+      el.style.maxWidth = w + 'px';
+    });
+    document.querySelectorAll('.f1').forEach(function(el){
+      el.style.left = w + 'px';
+    });
+  }
+  document.addEventListener('mousedown', function(e) {
+    if (!e.target.classList.contains('col-resize-handle')) return;
+    dragging = true;
+    startX = e.clientX;
+    startW = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--col0w')) || 260;
+    e.target.classList.add('dragging');
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+    e.preventDefault();
+  });
+  document.addEventListener('mousemove', function(e) {
+    if (!dragging) return;
+    setWidth(startW + (e.clientX - startX));
+  });
+  document.addEventListener('mouseup', function() {
+    if (!dragging) return;
+    dragging = false;
+    getHandles().forEach(function(h){ h.classList.remove('dragging'); });
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
+  });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,4 @@
+node_modules/
+.env
+*.xlsx
+app/data/_export_tmp.xlsx

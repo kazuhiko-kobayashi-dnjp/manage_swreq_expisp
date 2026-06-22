@@ -1,0 +1,16 @@
+{
+  "name": "bev-req-manager",
+  "version": "1.0.0",
+  "description": "BEV露出ISP 仕様要件織り込み管理",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "express": "^4.22.2"
+  },
+  "devDependencies": {
+    "playwright": "^1.61.0"
+  }
+}
