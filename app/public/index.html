@@ -615,15 +615,22 @@ function applyF() {
     if (fsw && r.sw !== fsw) return false;
     if (fev) {
       if (evMode === 'new') {
-        // 初出: このイベントに明示入力があり、かつそれより前の全イベントに明示入力がない
+        // 初出: カメラフィルタ指定時はそのカメラのみで判定、未指定は全カメラ横断
         var cm = r.event_plan && r.event_plan[fev];
-        if (!cm || !Object.values(cm).some(function(ci){return ci && (ci.s||isPos(ci.v));})) return false;
+        var camCheck = fc ? [fc] : null;
+        var hasThis = cm && (camCheck
+          ? camCheck.some(function(c){return cm[c] && (cm[c].s||isPos(cm[c].v));})
+          : Object.values(cm).some(function(ci){return ci && (ci.s||isPos(ci.v));}));
+        if (!hasThis) return false;
         var evOrder = (G.events_config || []).map(function(e){return e.name;});
         var fevIdx = evOrder.indexOf(fev);
         if (fevIdx > 0) {
           var hasPrior = evOrder.slice(0, fevIdx).some(function(prevEv){
             var pcm = r.event_plan && r.event_plan[prevEv];
-            return pcm && Object.values(pcm).some(function(ci){return ci && (ci.s||isPos(ci.v));});
+            if (!pcm) return false;
+            return camCheck
+              ? camCheck.some(function(c){return pcm[c] && (pcm[c].s||isPos(pcm[c].v));})
+              : Object.values(pcm).some(function(ci){return ci && (ci.s||isPos(ci.v));});
           });
           if (hasPrior) return false;
         }
