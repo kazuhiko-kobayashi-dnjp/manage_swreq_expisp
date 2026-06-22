@@ -264,7 +264,7 @@ td{padding:5px 7px;border-right:1px solid var(--bdr);font-size:12px;vertical-ali
     <button class="ntab" id="t2" onclick="showTab(2)">要件リスト</button>
   </div>
   <button class="btn-gear" title="イベント管理" onclick="openEvMgmt()">&#9881;</button>
-  <button class="btn-gear" title="Excelエクスポート" onclick="exportExcel()">&#x1F4E5;</button>
+  <button id="btnExcel" class="btn-gear" title="Excelエクスポート（全件）" onclick="exportExcel()">&#x1F4E5;</button>
   <span id="jiraStatus" style="font-size:10px;opacity:.6;margin-left:4px">JIRA確認中...</span>
 </div>
 
@@ -438,7 +438,7 @@ function setEvMode(mode) {
 }
 
 function exportExcel() {
-  var btn = document.querySelector('.btn-gear[title="Excelエクスポート"]');
+  var btn = document.getElementById('btnExcel');
   var isFiltered = filtered.length < G.req_data.length;
   if (btn) btn.textContent = '...';
   var req_ids = isFiltered ? filtered.map(function(r){return r.req_id;}) : null;
@@ -688,7 +688,7 @@ function applyF() {
 
   var isFiltered = filtered.length < G.req_data.length;
   document.getElementById('fcnt').textContent = filtered.length + ' / ' + G.req_data.length + ' 件';
-  var expBtn = document.querySelector('.btn-gear[title="Excelエクスポート"]');
+  var expBtn = document.getElementById('btnExcel');
   if (expBtn) expBtn.title = isFiltered ? 'Excelエクスポート（フィルタ中: ' + filtered.length + '件）' : 'Excelエクスポート（全件）';
   pg = 0;
   if (currentTab===0) renderDash();
