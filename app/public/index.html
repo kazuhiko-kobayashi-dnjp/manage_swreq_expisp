@@ -578,7 +578,7 @@ function applyDependencyCascade(r) {
     var parentCams = ep[parent] || {};
     Object.entries(parentCams).forEach(function(kv){
       var cam = kv[0], ci = kv[1];
-      if (!ci || (ci.s !== 'agreed' && ci.s !== 'confirmed')) return;
+      if (!ci || (!ci.s && !isPos(ci.v))) return;
       if (!ep[evName]) ep[evName] = {};
       var childCi = ep[evName][cam];
       // Only cascade if child has no status yet
