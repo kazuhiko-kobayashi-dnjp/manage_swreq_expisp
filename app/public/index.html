@@ -986,8 +986,9 @@ function showDetail(r, tr) {
 
   var evsList = visibleEvents();
   var evRows = '';
+  var cascadedEp = applyDependencyCascade(r);
   evsList.forEach(function(ev){
-    var cm = r.event_plan && r.event_plan[ev];
+    var cm = cascadedEp[ev];
     if (!cm) return;
     var cams = Object.entries(cm).filter(function(kv){return kv[1]&&(kv[1].s||isPos(kv[1].v));});
     if (!cams.length) return;
