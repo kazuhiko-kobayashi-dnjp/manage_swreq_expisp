@@ -439,14 +439,27 @@ function setEvMode(mode) {
 
 function exportExcel() {
   var btn = document.querySelector('.btn-gear[title="Excelエクスポート"]');
+  var isFiltered = filtered.length < G.req_data.length;
   if (btn) btn.textContent = '...';
-  var a = document.createElement('a');
-  a.href = '/api/export/excel';
-  a.download = '';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  setTimeout(function(){ if (btn) btn.textContent = '📥'; }, 2000);
+  var req_ids = isFiltered ? filtered.map(function(r){return r.req_id;}) : null;
+  fetch('/api/export/excel', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ req_ids: req_ids })
+  }).then(function(resp) {
+    if (!resp.ok) return resp.json().then(function(e){ alert('エクスポート失敗: ' + e.error); });
+    return resp.blob().then(function(blob) {
+      var cd = resp.headers.get('Content-Disposition') || '';
+      var m = cd.match(/filename\*?=(?:UTF-8'')?([^;]+)/i);
+      var fname = m ? decodeURIComponent(m[1].replace(/"/g,'')) : 'BEV要件リスト.xlsx';
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement('a');
+      a.href = url; a.download = fname;
+      document.body.appendChild(a); a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+  }).finally(function(){ if (btn) btn.textContent = '📥'; });
 }
 
 async function api(method, path, body) {
@@ -673,7 +686,10 @@ function applyF() {
     return a.req_id.localeCompare(b.req_id, undefined, {numeric:true});
   });
 
+  var isFiltered = filtered.length < G.req_data.length;
   document.getElementById('fcnt').textContent = filtered.length + ' / ' + G.req_data.length + ' 件';
+  var expBtn = document.querySelector('.btn-gear[title="Excelエクスポート"]');
+  if (expBtn) expBtn.title = isFiltered ? 'Excelエクスポート（フィルタ中: ' + filtered.length + '件）' : 'Excelエクスポート（全件）';
   pg = 0;
   if (currentTab===0) renderDash();
   else if (currentTab===1) renderMat();

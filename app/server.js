@@ -146,11 +146,14 @@ app.get('/api/jira/projects', async (req, res) => {
   }
 });
 
-// ========== API: Excel エクスポート ==========
-app.get('/api/export/excel', (req, res) => {
+// ========== API: Excel エクスポート（全件 or フィルタ済みID指定）==========
+function runExcelExport(dataJson, res) {
   const script = path.join(__dirname, 'export_excel.py');
+  const tmpData = path.join(__dirname, 'data', '_export_data_tmp.json');
   const outFile = path.join(__dirname, 'data', '_export_tmp.xlsx');
-  execFile('python3', [script, DATA_FILE, outFile], (err, stdout, stderr) => {
+  fs.writeFileSync(tmpData, JSON.stringify(dataJson), 'utf-8');
+  execFile('python3', [script, tmpData, outFile], (err, stdout, stderr) => {
+    fs.unlink(tmpData, () => {});
     if (err) {
       console.error('Excel export error:', stderr);
       return res.status(500).json({ error: stderr || err.message });
@@ -161,6 +164,19 @@ app.get('/api/export/excel', (req, res) => {
       fs.unlink(outFile, () => {});
     });
   });
+}
+
+app.get('/api/export/excel', (req, res) => {
+  runExcelExport(readData(), res);
+});
+
+app.post('/api/export/excel', (req, res) => {
+  const { req_ids } = req.body;
+  const data = readData();
+  if (req_ids && req_ids.length > 0) {
+    data.req_data = data.req_data.filter(r => req_ids.includes(r.req_id));
+  }
+  runExcelExport(data, res);
 });
 
 // ========== JIRA APIヘルパー ==========
