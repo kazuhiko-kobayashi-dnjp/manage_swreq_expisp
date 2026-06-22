@@ -13005,7 +13005,8 @@
     {
       "req_id": "REQ-0105",
       "cameras": [
-        "FCM"
+        "FCM",
+        "Tele"
       ],
       "cat1": "カメラヘッド制御",
       "cat2": "カメラ制御CAMHAL定数仕様書",
@@ -13026,10 +13027,18 @@
           "FCM": {
             "v": "-",
             "s": null
+          },
+          "Tele": {
+            "v": "-",
+            "s": null
           }
         },
         "SYS3_P1A1_3巡目": {
           "FCM": {
+            "v": "-",
+            "s": null
+          },
+          "Tele": {
             "v": "-",
             "s": null
           }
@@ -13038,10 +13047,18 @@
           "FCM": {
             "v": "-",
             "s": null
+          },
+          "Tele": {
+            "v": "-",
+            "s": null
           }
         },
         "SYS3_P2A2_#7": {
           "FCM": {
+            "v": "○",
+            "s": null
+          },
+          "Tele": {
             "v": "○",
             "s": null
           }
@@ -13050,6 +13067,70 @@
           "FCM": {
             "v": "○",
             "s": null
+          },
+          "Tele": {
+            "v": "○",
+            "s": null
+          }
+        },
+        "FB1": {
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          }
+        },
+        "FB2": {
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          }
+        },
+        "FB3": {
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          }
+        },
+        "FB4": {
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          }
+        },
+        "FB5": {
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          }
+        },
+        "FB6": {
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          }
+        },
+        "SYS4_P1A1": {
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          }
+        },
+        "SYS4_P2": {
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          }
+        },
+        "電子CV": {
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          }
+        },
+        "CV": {
+          "Tele": {
+            "v": "",
+            "s": "agreed"
           }
         }
       },
@@ -14080,7 +14161,9 @@
     {
       "req_id": "REQ-0112",
       "cameras": [
-        "FCM"
+        "FCM",
+        "Tele",
+        "Side"
       ],
       "cat1": "カメラヘッド制御",
       "cat2": "カメラ制御CAMHAL定数仕様書",
@@ -14103,11 +14186,27 @@
           "FCM": {
             "v": "◎",
             "s": "agreed"
+          },
+          "Tele": {
+            "v": "◎",
+            "s": null
+          },
+          "Side": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "SYS4_P2": {
           "FCM": {
             "v": "◎",
+            "s": "agreed"
+          },
+          "Tele": {
+            "v": "◎",
+            "s": null
+          },
+          "Side": {
+            "v": "",
             "s": "agreed"
           }
         },
@@ -14115,11 +14214,103 @@
           "FCM": {
             "v": "◎",
             "s": "agreed"
+          },
+          "Tele": {
+            "v": "◎",
+            "s": null
+          },
+          "Side": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "CV": {
           "FCM": {
             "v": "◎",
+            "s": "agreed"
+          },
+          "Tele": {
+            "v": "◎",
+            "s": null
+          },
+          "Side": {
+            "v": "",
+            "s": "agreed"
+          }
+        },
+        "PreFOT": {
+          "Tele": {
+            "v": "-",
+            "s": null
+          }
+        },
+        "SYS3_P1A1_3巡目": {
+          "Tele": {
+            "v": "-",
+            "s": null
+          }
+        },
+        "SYS3_P1A2_4巡目": {
+          "Tele": {
+            "v": "-",
+            "s": null
+          }
+        },
+        "SYS3_P2A2_#7": {
+          "Tele": {
+            "v": "-",
+            "s": null
+          }
+        },
+        "FOT": {
+          "Tele": {
+            "v": "-",
+            "s": null
+          }
+        },
+        "FS-CS": {
+          "Tele": {
+            "v": "-",
+            "s": null
+          }
+        },
+        "FB1": {
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
+            "v": "",
+            "s": "agreed"
+          }
+        },
+        "FB2": {
+          "Side": {
+            "v": "",
+            "s": "agreed"
+          }
+        },
+        "FB3": {
+          "Side": {
+            "v": "",
+            "s": "agreed"
+          }
+        },
+        "FB4": {
+          "Side": {
+            "v": "",
+            "s": "agreed"
+          }
+        },
+        "FB5": {
+          "Side": {
+            "v": "",
+            "s": "agreed"
+          }
+        },
+        "FB6": {
+          "Side": {
+            "v": "",
             "s": "agreed"
           }
         }
@@ -15224,7 +15415,9 @@
     {
       "req_id": "REQ-0124",
       "cameras": [
-        "FCM"
+        "FCM",
+        "Tele",
+        "Side"
       ],
       "cat1": "カメラヘッド制御",
       "cat2": "カメラ制御撮像アプリ定数仕様書",
@@ -15247,10 +15440,26 @@
           "FCM": {
             "v": "-",
             "s": null
+          },
+          "Tele": {
+            "v": "-",
+            "s": null
+          },
+          "Side": {
+            "v": "-",
+            "s": null
           }
         },
         "SYS3_P1A1_3巡目": {
           "FCM": {
+            "v": "-",
+            "s": null
+          },
+          "Tele": {
+            "v": "-",
+            "s": null
+          },
+          "Side": {
             "v": "-",
             "s": null
           }
@@ -15259,10 +15468,26 @@
           "FCM": {
             "v": "-",
             "s": null
+          },
+          "Tele": {
+            "v": "-",
+            "s": null
+          },
+          "Side": {
+            "v": "-",
+            "s": null
           }
         },
         "SYS3_P2A2_#7": {
           "FCM": {
+            "v": "◎",
+            "s": null
+          },
+          "Tele": {
+            "v": "◎",
+            "s": null
+          },
+          "Side": {
             "v": "◎",
             "s": null
           }
@@ -15271,16 +15496,40 @@
           "FCM": {
             "v": "◎",
             "s": null
+          },
+          "Tele": {
+            "v": "◎",
+            "s": null
+          },
+          "Side": {
+            "v": "◎",
+            "s": null
           }
         },
         "FS-CS": {
           "FCM": {
             "v": "◎",
             "s": null
+          },
+          "Tele": {
+            "v": "◎",
+            "s": null
+          },
+          "Side": {
+            "v": "-",
+            "s": null
           }
         },
         "FB1": {
           "FCM": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
             "v": "",
             "s": "agreed"
           }
@@ -15289,10 +15538,26 @@
           "FCM": {
             "v": "",
             "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "FB3": {
           "FCM": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
             "v": "",
             "s": "agreed"
           }
@@ -15301,10 +15566,26 @@
           "FCM": {
             "v": "",
             "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "FB5": {
           "FCM": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
             "v": "",
             "s": "agreed"
           }
@@ -15313,10 +15594,26 @@
           "FCM": {
             "v": "",
             "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "SYS4_P1A1": {
           "FCM": {
+            "v": "-",
+            "s": "agreed"
+          },
+          "Tele": {
+            "v": "-",
+            "s": "agreed"
+          },
+          "Side": {
             "v": "-",
             "s": "agreed"
           }
@@ -15325,16 +15622,40 @@
           "FCM": {
             "v": "-",
             "s": "agreed"
+          },
+          "Tele": {
+            "v": "-",
+            "s": "agreed"
+          },
+          "Side": {
+            "v": "-",
+            "s": "agreed"
           }
         },
         "電子CV": {
           "FCM": {
             "v": "-",
             "s": "agreed"
+          },
+          "Tele": {
+            "v": "-",
+            "s": "agreed"
+          },
+          "Side": {
+            "v": "-",
+            "s": "agreed"
           }
         },
         "CV": {
           "FCM": {
+            "v": "-",
+            "s": "agreed"
+          },
+          "Tele": {
+            "v": "-",
+            "s": "agreed"
+          },
+          "Side": {
             "v": "-",
             "s": "agreed"
           }
@@ -16816,7 +17137,9 @@
     {
       "req_id": "REQ-0135",
       "cameras": [
-        "FCM"
+        "FCM",
+        "Tele",
+        "Side"
       ],
       "cat1": "カメラヘッド制御",
       "cat2": "カメラ制御撮像アプリ定数仕様書",
@@ -16875,11 +17198,27 @@
           "FCM": {
             "v": "◎",
             "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "SYS4_P2": {
           "FCM": {
             "v": "◎",
+            "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
+            "v": "",
             "s": "agreed"
           }
         },
@@ -16887,11 +17226,63 @@
           "FCM": {
             "v": "◎",
             "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "CV": {
           "FCM": {
             "v": "◎",
+            "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
+            "v": "",
+            "s": "agreed"
+          }
+        },
+        "FB1": {
+          "Side": {
+            "v": "",
+            "s": "agreed"
+          }
+        },
+        "FB2": {
+          "Side": {
+            "v": "",
+            "s": "agreed"
+          }
+        },
+        "FB3": {
+          "Side": {
+            "v": "",
+            "s": "agreed"
+          }
+        },
+        "FB4": {
+          "Side": {
+            "v": "",
+            "s": "agreed"
+          }
+        },
+        "FB5": {
+          "Side": {
+            "v": "",
+            "s": "agreed"
+          }
+        },
+        "FB6": {
+          "Side": {
+            "v": "",
             "s": "agreed"
           }
         }
@@ -28032,7 +28423,8 @@
     {
       "req_id": "REQ-0191",
       "cameras": [
-        "FCM"
+        "FCM",
+        "Tele"
       ],
       "cat1": "ISP制御(ORIN)",
       "cat2": "ISP CMN設定値仕様書",
@@ -28055,11 +28447,19 @@
           "FCM": {
             "v": "-",
             "s": null
+          },
+          "Tele": {
+            "v": "x",
+            "s": null
           }
         },
         "SYS3_P1A1_2巡目_優先度①②": {
           "FCM": {
             "v": "-",
+            "s": null
+          },
+          "Tele": {
+            "v": "x",
             "s": null
           }
         },
@@ -28067,11 +28467,19 @@
           "FCM": {
             "v": "-",
             "s": null
+          },
+          "Tele": {
+            "v": "x",
+            "s": null
           }
         },
         "PreFOT": {
           "FCM": {
             "v": "-",
+            "s": null
+          },
+          "Tele": {
+            "v": "x",
             "s": null
           }
         },
@@ -28079,10 +28487,18 @@
           "FCM": {
             "v": "-",
             "s": null
+          },
+          "Tele": {
+            "v": "x",
+            "s": null
           }
         },
         "SYS3_P1A2_4巡目": {
           "FCM": {
+            "v": "○→x",
+            "s": null
+          },
+          "Tele": {
             "v": "○→x",
             "s": null
           }
@@ -28091,10 +28507,18 @@
           "FCM": {
             "v": "◎",
             "s": null
+          },
+          "Tele": {
+            "v": "◎",
+            "s": null
           }
         },
         "FOT": {
           "FCM": {
+            "v": "◎",
+            "s": null
+          },
+          "Tele": {
             "v": "◎",
             "s": null
           }
@@ -28103,10 +28527,18 @@
           "FCM": {
             "v": "",
             "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "FB2": {
           "FCM": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Tele": {
             "v": "",
             "s": "agreed"
           }
@@ -28115,10 +28547,18 @@
           "FCM": {
             "v": "",
             "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "FB4": {
           "FCM": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Tele": {
             "v": "",
             "s": "agreed"
           }
@@ -28127,10 +28567,18 @@
           "FCM": {
             "v": "",
             "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "FB6": {
           "FCM": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Tele": {
             "v": "",
             "s": "agreed"
           }
@@ -28139,10 +28587,18 @@
           "FCM": {
             "v": "",
             "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "SYS4_P2": {
           "FCM": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Tele": {
             "v": "",
             "s": "agreed"
           }
@@ -28151,10 +28607,18 @@
           "FCM": {
             "v": "",
             "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "CV": {
           "FCM": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Tele": {
             "v": "",
             "s": "agreed"
           }
@@ -28298,7 +28762,9 @@
       "req_id": "REQ-0193",
       "cameras": [
         "FCM",
-        "PVM"
+        "PVM",
+        "Tele",
+        "Side"
       ],
       "cat1": "ISP制御(ORIN)",
       "cat2": "ISP CMN設定値仕様書",
@@ -28323,6 +28789,14 @@
           "PVM": {
             "v": "-",
             "s": null
+          },
+          "Tele": {
+            "v": "-",
+            "s": null
+          },
+          "Side": {
+            "v": "-",
+            "s": null
           }
         },
         "SYS3_P2A2_#7": {
@@ -28331,6 +28805,14 @@
             "s": null
           },
           "PVM": {
+            "v": "◎",
+            "s": null
+          },
+          "Tele": {
+            "v": "◎",
+            "s": null
+          },
+          "Side": {
             "v": "◎",
             "s": null
           }
@@ -28343,6 +28825,14 @@
           "PVM": {
             "v": "◎",
             "s": null
+          },
+          "Tele": {
+            "v": "◎",
+            "s": null
+          },
+          "Side": {
+            "v": "◎",
+            "s": null
           }
         },
         "FB1": {
@@ -28351,6 +28841,14 @@
             "s": "agreed"
           },
           "PVM": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
             "v": "",
             "s": "agreed"
           }
@@ -28363,6 +28861,14 @@
           "PVM": {
             "v": "",
             "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "FB3": {
@@ -28371,6 +28877,14 @@
             "s": "agreed"
           },
           "PVM": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
             "v": "",
             "s": "agreed"
           }
@@ -28383,6 +28897,14 @@
           "PVM": {
             "v": "",
             "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "FB5": {
@@ -28391,6 +28913,14 @@
             "s": "agreed"
           },
           "PVM": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
             "v": "",
             "s": "agreed"
           }
@@ -28403,6 +28933,14 @@
           "PVM": {
             "v": "",
             "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "SYS4_P1A1": {
@@ -28411,6 +28949,14 @@
             "s": "agreed"
           },
           "PVM": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
             "v": "",
             "s": "agreed"
           }
@@ -28423,6 +28969,14 @@
           "PVM": {
             "v": "",
             "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "電子CV": {
@@ -28433,6 +28987,14 @@
           "PVM": {
             "v": "",
             "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "CV": {
@@ -28441,6 +29003,14 @@
             "s": "agreed"
           },
           "PVM": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
             "v": "",
             "s": "agreed"
           }
@@ -45388,7 +45958,9 @@
       "req_id": "REQ-0275",
       "cameras": [
         "FCM",
-        "Side"
+        "Side",
+        "Tele",
+        "PVM"
       ],
       "cat1": "ISP制御(ORIN)",
       "cat2": "ISP HAL仕様書",
@@ -45413,6 +45985,14 @@
           "Side": {
             "v": "-",
             "s": null
+          },
+          "Tele": {
+            "v": "-",
+            "s": null
+          },
+          "PVM": {
+            "v": "-",
+            "s": null
           }
         },
         "SYS3_P2A2_#7": {
@@ -45421,6 +46001,14 @@
             "s": null
           },
           "Side": {
+            "v": "◎",
+            "s": null
+          },
+          "Tele": {
+            "v": "◎",
+            "s": null
+          },
+          "PVM": {
             "v": "◎",
             "s": null
           }
@@ -45433,6 +46021,14 @@
           "Side": {
             "v": "◎",
             "s": null
+          },
+          "Tele": {
+            "v": "◎",
+            "s": null
+          },
+          "PVM": {
+            "v": "◎",
+            "s": null
           }
         },
         "FB1": {
@@ -45441,6 +46037,14 @@
             "s": "agreed"
           },
           "Side": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "PVM": {
             "v": "",
             "s": "agreed"
           }
@@ -45453,6 +46057,14 @@
           "Side": {
             "v": "",
             "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "PVM": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "FB3": {
@@ -45461,6 +46073,14 @@
             "s": "agreed"
           },
           "Side": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "PVM": {
             "v": "",
             "s": "agreed"
           }
@@ -45473,6 +46093,14 @@
           "Side": {
             "v": "",
             "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "PVM": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "FB5": {
@@ -45481,6 +46109,14 @@
             "s": "agreed"
           },
           "Side": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "PVM": {
             "v": "",
             "s": "agreed"
           }
@@ -45493,6 +46129,14 @@
           "Side": {
             "v": "",
             "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "PVM": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "SYS4_P1A1": {
@@ -45501,6 +46145,14 @@
             "s": "agreed"
           },
           "Side": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "PVM": {
             "v": "",
             "s": "agreed"
           }
@@ -45513,6 +46165,14 @@
           "Side": {
             "v": "",
             "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "PVM": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "電子CV": {
@@ -45523,6 +46183,14 @@
           "Side": {
             "v": "",
             "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "PVM": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "CV": {
@@ -45531,6 +46199,14 @@
             "s": "agreed"
           },
           "Side": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "PVM": {
             "v": "",
             "s": "agreed"
           }
@@ -65575,7 +66251,9 @@
       "req_id": "REQ-0370",
       "cameras": [
         "FCM",
-        "PVM"
+        "PVM",
+        "Tele",
+        "Side"
       ],
       "cat1": "ISP制御(ORIN)",
       "cat2": "ISP HAL設定値仕様書",
@@ -65600,6 +66278,14 @@
           "PVM": {
             "v": "-",
             "s": null
+          },
+          "Tele": {
+            "v": "-",
+            "s": null
+          },
+          "Side": {
+            "v": "-",
+            "s": null
           }
         },
         "SYS3_P2A2_#7": {
@@ -65608,6 +66294,14 @@
             "s": null
           },
           "PVM": {
+            "v": "◎",
+            "s": null
+          },
+          "Tele": {
+            "v": "◎",
+            "s": null
+          },
+          "Side": {
             "v": "◎",
             "s": null
           }
@@ -65620,6 +66314,14 @@
           "PVM": {
             "v": "◎",
             "s": null
+          },
+          "Tele": {
+            "v": "◎",
+            "s": null
+          },
+          "Side": {
+            "v": "◎",
+            "s": null
           }
         },
         "FB1": {
@@ -65628,6 +66330,14 @@
             "s": "agreed"
           },
           "PVM": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
             "v": "",
             "s": "agreed"
           }
@@ -65640,6 +66350,14 @@
           "PVM": {
             "v": "",
             "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "FB3": {
@@ -65648,6 +66366,14 @@
             "s": "agreed"
           },
           "PVM": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
             "v": "",
             "s": "agreed"
           }
@@ -65660,6 +66386,14 @@
           "PVM": {
             "v": "",
             "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "FB5": {
@@ -65668,6 +66402,14 @@
             "s": "agreed"
           },
           "PVM": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
             "v": "",
             "s": "agreed"
           }
@@ -65680,6 +66422,14 @@
           "PVM": {
             "v": "",
             "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "SYS4_P1A1": {
@@ -65688,6 +66438,14 @@
             "s": "agreed"
           },
           "PVM": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
             "v": "",
             "s": "agreed"
           }
@@ -65700,6 +66458,14 @@
           "PVM": {
             "v": "",
             "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "電子CV": {
@@ -65710,6 +66476,14 @@
           "PVM": {
             "v": "",
             "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "CV": {
@@ -65718,6 +66492,14 @@
             "s": "agreed"
           },
           "PVM": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
             "v": "",
             "s": "agreed"
           }
@@ -68370,7 +69152,8 @@
       "cameras": [
         "FCM",
         "Tele",
-        "Side"
+        "Side",
+        "PVM"
       ],
       "cat1": "ISP制御(ORIN)",
       "cat2": "ISP HAL設定値仕様書",
@@ -68401,6 +69184,10 @@
           "Side": {
             "v": "-",
             "s": null
+          },
+          "PVM": {
+            "v": "-",
+            "s": null
           }
         },
         "SYS3_P1A1_3巡目": {
@@ -68413,6 +69200,10 @@
             "s": null
           },
           "Side": {
+            "v": "-",
+            "s": null
+          },
+          "PVM": {
             "v": "-",
             "s": null
           }
@@ -68429,6 +69220,10 @@
           "Side": {
             "v": "-",
             "s": null
+          },
+          "PVM": {
+            "v": "-",
+            "s": null
           }
         },
         "SYS3_P2A2_#7": {
@@ -68442,6 +69237,10 @@
           },
           "Side": {
             "v": "◎",
+            "s": null
+          },
+          "PVM": {
+            "v": "-",
             "s": null
           }
         },
@@ -68457,6 +69256,10 @@
           "Side": {
             "v": "◎",
             "s": null
+          },
+          "PVM": {
+            "v": "○",
+            "s": null
           }
         },
         "FS-CS": {
@@ -68469,6 +69272,10 @@
             "s": null
           },
           "Side": {
+            "v": "-",
+            "s": null
+          },
+          "PVM": {
             "v": "-",
             "s": null
           }
@@ -68485,6 +69292,10 @@
           "Side": {
             "v": "",
             "s": "agreed"
+          },
+          "PVM": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "FB2": {
@@ -68497,6 +69308,10 @@
             "s": "agreed"
           },
           "Side": {
+            "v": "",
+            "s": "agreed"
+          },
+          "PVM": {
             "v": "",
             "s": "agreed"
           }
@@ -68513,6 +69328,10 @@
           "Side": {
             "v": "",
             "s": "agreed"
+          },
+          "PVM": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "FB4": {
@@ -68525,6 +69344,10 @@
             "s": "agreed"
           },
           "Side": {
+            "v": "",
+            "s": "agreed"
+          },
+          "PVM": {
             "v": "",
             "s": "agreed"
           }
@@ -68541,6 +69364,10 @@
           "Side": {
             "v": "",
             "s": "agreed"
+          },
+          "PVM": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "FB6": {
@@ -68553,6 +69380,10 @@
             "s": "agreed"
           },
           "Side": {
+            "v": "",
+            "s": "agreed"
+          },
+          "PVM": {
             "v": "",
             "s": "agreed"
           }
@@ -68569,6 +69400,10 @@
           "Side": {
             "v": "-",
             "s": "agreed"
+          },
+          "PVM": {
+            "v": "-",
+            "s": "agreed"
           }
         },
         "SYS4_P2": {
@@ -68581,6 +69416,10 @@
             "s": "agreed"
           },
           "Side": {
+            "v": "-",
+            "s": "agreed"
+          },
+          "PVM": {
             "v": "-",
             "s": "agreed"
           }
@@ -68597,6 +69436,10 @@
           "Side": {
             "v": "-",
             "s": "agreed"
+          },
+          "PVM": {
+            "v": "-",
+            "s": "agreed"
           }
         },
         "CV": {
@@ -68609,6 +69452,10 @@
             "s": "agreed"
           },
           "Side": {
+            "v": "-",
+            "s": "agreed"
+          },
+          "PVM": {
             "v": "-",
             "s": "agreed"
           }
@@ -69214,7 +70061,8 @@
       "cameras": [
         "FCM",
         "Tele",
-        "Side"
+        "Side",
+        "PVM"
       ],
       "cat1": "ISP制御(ORIN)",
       "cat2": "ISP HAL設定値仕様書",
@@ -69245,6 +70093,10 @@
           "Side": {
             "v": "-",
             "s": null
+          },
+          "PVM": {
+            "v": "-",
+            "s": null
           }
         },
         "SYS3_P1A1_3巡目": {
@@ -69257,6 +70109,10 @@
             "s": null
           },
           "Side": {
+            "v": "-",
+            "s": null
+          },
+          "PVM": {
             "v": "-",
             "s": null
           }
@@ -69273,6 +70129,10 @@
           "Side": {
             "v": "-",
             "s": null
+          },
+          "PVM": {
+            "v": "-",
+            "s": null
           }
         },
         "SYS3_P2A2_#7": {
@@ -69286,6 +70146,10 @@
           },
           "Side": {
             "v": "◎",
+            "s": null
+          },
+          "PVM": {
+            "v": "-",
             "s": null
           }
         },
@@ -69301,6 +70165,10 @@
           "Side": {
             "v": "◎",
             "s": null
+          },
+          "PVM": {
+            "v": "○",
+            "s": null
           }
         },
         "FS-CS": {
@@ -69315,6 +70183,10 @@
           "Side": {
             "v": "◎",
             "s": null
+          },
+          "PVM": {
+            "v": "-",
+            "s": null
           }
         },
         "FB1": {
@@ -69327,6 +70199,10 @@
             "s": "agreed"
           },
           "Side": {
+            "v": "",
+            "s": "agreed"
+          },
+          "PVM": {
             "v": "",
             "s": "agreed"
           }
@@ -69343,6 +70219,10 @@
           "Side": {
             "v": "",
             "s": "agreed"
+          },
+          "PVM": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "FB3": {
@@ -69355,6 +70235,10 @@
             "s": "agreed"
           },
           "Side": {
+            "v": "",
+            "s": "agreed"
+          },
+          "PVM": {
             "v": "",
             "s": "agreed"
           }
@@ -69371,6 +70255,10 @@
           "Side": {
             "v": "",
             "s": "agreed"
+          },
+          "PVM": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "FB5": {
@@ -69383,6 +70271,10 @@
             "s": "agreed"
           },
           "Side": {
+            "v": "",
+            "s": "agreed"
+          },
+          "PVM": {
             "v": "",
             "s": "agreed"
           }
@@ -69399,6 +70291,10 @@
           "Side": {
             "v": "",
             "s": "agreed"
+          },
+          "PVM": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "SYS4_P1A1": {
@@ -69413,6 +70309,10 @@
           "Side": {
             "v": "◎",
             "s": "agreed"
+          },
+          "PVM": {
+            "v": "-",
+            "s": "agreed"
           }
         },
         "SYS4_P2": {
@@ -69425,6 +70325,10 @@
             "s": "agreed"
           },
           "Side": {
+            "v": "-",
+            "s": "agreed"
+          },
+          "PVM": {
             "v": "-",
             "s": "agreed"
           }
@@ -69441,6 +70345,10 @@
           "Side": {
             "v": "◎",
             "s": "agreed"
+          },
+          "PVM": {
+            "v": "-",
+            "s": "agreed"
           }
         },
         "CV": {
@@ -69454,6 +70362,10 @@
           },
           "Side": {
             "v": "◎",
+            "s": "agreed"
+          },
+          "PVM": {
+            "v": "-",
             "s": "agreed"
           }
         }
@@ -70102,7 +71014,10 @@
     {
       "req_id": "REQ-0390",
       "cameras": [
-        "FCM"
+        "FCM",
+        "Tele",
+        "Side",
+        "PVM"
       ],
       "cat1": "ISP制御(ORIN)",
       "cat2": "ISP HAL設定値仕様書",
@@ -70123,10 +71038,34 @@
           "FCM": {
             "v": "-",
             "s": null
+          },
+          "Tele": {
+            "v": "-",
+            "s": null
+          },
+          "Side": {
+            "v": "-",
+            "s": null
+          },
+          "PVM": {
+            "v": "-",
+            "s": null
           }
         },
         "SYS3_P1A1_3巡目": {
           "FCM": {
+            "v": "-",
+            "s": null
+          },
+          "Tele": {
+            "v": "-",
+            "s": null
+          },
+          "Side": {
+            "v": "-",
+            "s": null
+          },
+          "PVM": {
             "v": "-",
             "s": null
           }
@@ -70135,16 +71074,52 @@
           "FCM": {
             "v": "-",
             "s": null
+          },
+          "Tele": {
+            "v": "-",
+            "s": null
+          },
+          "Side": {
+            "v": "-",
+            "s": null
+          },
+          "PVM": {
+            "v": "-",
+            "s": null
           }
         },
         "SYS3_P2A2_#7": {
           "FCM": {
             "v": "-",
             "s": null
+          },
+          "Tele": {
+            "v": "○",
+            "s": null
+          },
+          "Side": {
+            "v": "○",
+            "s": null
+          },
+          "PVM": {
+            "v": "○",
+            "s": null
           }
         },
         "FOT": {
           "FCM": {
+            "v": "○",
+            "s": null
+          },
+          "Tele": {
+            "v": "○",
+            "s": null
+          },
+          "Side": {
+            "v": "○",
+            "s": null
+          },
+          "PVM": {
             "v": "○",
             "s": null
           }
@@ -70153,10 +71128,34 @@
           "FCM": {
             "v": "-",
             "s": null
+          },
+          "Tele": {
+            "v": "-",
+            "s": null
+          },
+          "Side": {
+            "v": "-",
+            "s": null
+          },
+          "PVM": {
+            "v": "-",
+            "s": null
           }
         },
         "FB1": {
           "FCM": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
+            "v": "",
+            "s": "agreed"
+          },
+          "PVM": {
             "v": "",
             "s": "agreed"
           }
@@ -70165,10 +71164,34 @@
           "FCM": {
             "v": "",
             "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
+            "v": "",
+            "s": "agreed"
+          },
+          "PVM": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "FB3": {
           "FCM": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
+            "v": "",
+            "s": "agreed"
+          },
+          "PVM": {
             "v": "",
             "s": "agreed"
           }
@@ -70177,10 +71200,34 @@
           "FCM": {
             "v": "",
             "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
+            "v": "",
+            "s": "agreed"
+          },
+          "PVM": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "FB5": {
           "FCM": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
+            "v": "",
+            "s": "agreed"
+          },
+          "PVM": {
             "v": "",
             "s": "agreed"
           }
@@ -70189,10 +71236,34 @@
           "FCM": {
             "v": "",
             "s": "agreed"
+          },
+          "Tele": {
+            "v": "",
+            "s": "agreed"
+          },
+          "Side": {
+            "v": "",
+            "s": "agreed"
+          },
+          "PVM": {
+            "v": "",
+            "s": "agreed"
           }
         },
         "SYS4_P1A1": {
           "FCM": {
+            "v": "-",
+            "s": "agreed"
+          },
+          "Tele": {
+            "v": "-",
+            "s": "agreed"
+          },
+          "Side": {
+            "v": "-",
+            "s": "agreed"
+          },
+          "PVM": {
             "v": "-",
             "s": "agreed"
           }
@@ -70201,16 +71272,52 @@
           "FCM": {
             "v": "-",
             "s": "agreed"
+          },
+          "Tele": {
+            "v": "-",
+            "s": "agreed"
+          },
+          "Side": {
+            "v": "-",
+            "s": "agreed"
+          },
+          "PVM": {
+            "v": "-",
+            "s": "agreed"
           }
         },
         "電子CV": {
           "FCM": {
             "v": "-",
             "s": "agreed"
+          },
+          "Tele": {
+            "v": "-",
+            "s": "agreed"
+          },
+          "Side": {
+            "v": "-",
+            "s": "agreed"
+          },
+          "PVM": {
+            "v": "-",
+            "s": "agreed"
           }
         },
         "CV": {
           "FCM": {
+            "v": "-",
+            "s": "agreed"
+          },
+          "Tele": {
+            "v": "-",
+            "s": "agreed"
+          },
+          "Side": {
+            "v": "-",
+            "s": "agreed"
+          },
+          "PVM": {
             "v": "-",
             "s": "agreed"
           }
@@ -74096,124 +75203,6 @@
       "req_person": "中村"
     },
     {
-      "req_id": "REQ-0415",
-      "cameras": [
-        "Tele"
-      ],
-      "cat1": "カメラヘッド制御",
-      "cat2": "カメラ制御CAMHAL定数仕様書",
-      "cat3": "MVH-VDCTRL_CAMHAL_8M_PARAM-GEN9-STD-010",
-      "ver": "v010",
-      "desc": "イメージャ初期設定値の変更（異常検知機能関連）　中村",
-      "issue_date": "2025-12-17",
-      "soc": "",
-      "subteam": "Tele Control",
-      "sw": "",
-      "summary": "",
-      "jira": [
-        "BEV26EGSD-7904"
-      ],
-      "persons": [
-        "中村 賢治"
-      ],
-      "event_plan": {
-        "PreFOT": {
-          "Tele": {
-            "v": "-",
-            "s": null
-          }
-        },
-        "SYS3_P1A1_3巡目": {
-          "Tele": {
-            "v": "-",
-            "s": null
-          }
-        },
-        "SYS3_P1A2_4巡目": {
-          "Tele": {
-            "v": "-",
-            "s": null
-          }
-        },
-        "SYS3_P2A2_#7": {
-          "Tele": {
-            "v": "○",
-            "s": null
-          }
-        },
-        "FOT": {
-          "Tele": {
-            "v": "○",
-            "s": null
-          }
-        },
-        "FB1": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB2": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB3": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB4": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB5": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB6": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "SYS4_P1A1": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "SYS4_P2": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "電子CV": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "CV": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          }
-        }
-      },
-      "orig_req_ids": [
-        "REQ-0421"
-      ],
-      "req_person": "中村"
-    },
-    {
       "req_id": "REQ-0416",
       "cameras": [
         "Tele",
@@ -74779,151 +75768,6 @@
         "REQ-0710"
       ],
       "req_person": "村尾"
-    },
-    {
-      "req_id": "REQ-0419",
-      "cameras": [
-        "Tele",
-        "Side"
-      ],
-      "cat1": "カメラヘッド制御",
-      "cat2": "カメラ制御CAMHAL定数仕様書",
-      "cat3": "MVH-VDCTRL_CAMHAL_8M_PARAM-GEN9-STD-012",
-      "ver": "v012",
-      "desc": "認識への出力についての補足説明追記　石地",
-      "issue_date": "2026/04/10",
-      "soc": "",
-      "subteam": "Tele Control",
-      "sw": "",
-      "summary": "",
-      "jira": [],
-      "persons": [
-        "中村 賢治",
-        "村尾 俊和"
-      ],
-      "event_plan": {
-        "PreFOT": {
-          "Tele": {
-            "v": "-",
-            "s": null
-          }
-        },
-        "SYS3_P1A1_3巡目": {
-          "Tele": {
-            "v": "-",
-            "s": null
-          }
-        },
-        "SYS3_P1A2_4巡目": {
-          "Tele": {
-            "v": "-",
-            "s": null
-          }
-        },
-        "SYS3_P2A2_#7": {
-          "Tele": {
-            "v": "-",
-            "s": null
-          }
-        },
-        "FOT": {
-          "Tele": {
-            "v": "-",
-            "s": null
-          }
-        },
-        "FS-CS": {
-          "Tele": {
-            "v": "-",
-            "s": null
-          }
-        },
-        "FB1": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "SYS4_P1A1": {
-          "Tele": {
-            "v": "◎",
-            "s": null
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "SYS4_P2": {
-          "Tele": {
-            "v": "◎",
-            "s": null
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "電子CV": {
-          "Tele": {
-            "v": "◎",
-            "s": null
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "CV": {
-          "Tele": {
-            "v": "◎",
-            "s": null
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB2": {
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB3": {
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB4": {
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB5": {
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB6": {
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        }
-      },
-      "orig_req_ids": [
-        "REQ-0425",
-        "REQ-0711"
-      ],
-      "req_person": "石地"
     },
     {
       "req_id": "REQ-0420",
@@ -76000,197 +76844,6 @@
       "req_person": "中村"
     },
     {
-      "req_id": "REQ-0427",
-      "cameras": [
-        "Tele",
-        "Side"
-      ],
-      "cat1": "カメラヘッド制御",
-      "cat2": "カメラ制御撮像アプリ定数仕様書",
-      "cat3": "MVH-VDCTRL_EXP_CMN_LOGIC_PARAM-GEN9-STD-007",
-      "ver": "v007",
-      "desc": "処理順番起因の上書き対策",
-      "issue_date": "2025-12-01",
-      "soc": "",
-      "subteam": "Tele Control",
-      "sw": "",
-      "summary": "",
-      "jira": [
-        "BEV26EGSD-7347"
-      ],
-      "persons": [
-        "中村 賢治",
-        "村尾 俊和"
-      ],
-      "event_plan": {
-        "PreFOT": {
-          "Tele": {
-            "v": "-",
-            "s": null
-          },
-          "Side": {
-            "v": "-",
-            "s": null
-          }
-        },
-        "SYS3_P1A1_3巡目": {
-          "Tele": {
-            "v": "-",
-            "s": null
-          },
-          "Side": {
-            "v": "-",
-            "s": null
-          }
-        },
-        "SYS3_P1A2_4巡目": {
-          "Tele": {
-            "v": "-",
-            "s": null
-          },
-          "Side": {
-            "v": "-",
-            "s": null
-          }
-        },
-        "SYS3_P2A2_#7": {
-          "Tele": {
-            "v": "◎",
-            "s": null
-          },
-          "Side": {
-            "v": "◎",
-            "s": null
-          }
-        },
-        "FOT": {
-          "Tele": {
-            "v": "◎",
-            "s": null
-          },
-          "Side": {
-            "v": "◎",
-            "s": null
-          }
-        },
-        "FS-CS": {
-          "Tele": {
-            "v": "◎",
-            "s": null
-          },
-          "Side": {
-            "v": "-",
-            "s": null
-          }
-        },
-        "FB1": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB2": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB3": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB4": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB5": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB6": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "SYS4_P1A1": {
-          "Tele": {
-            "v": "-",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "-",
-            "s": "agreed"
-          }
-        },
-        "SYS4_P2": {
-          "Tele": {
-            "v": "-",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "-",
-            "s": "agreed"
-          }
-        },
-        "電子CV": {
-          "Tele": {
-            "v": "-",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "-",
-            "s": "agreed"
-          }
-        },
-        "CV": {
-          "Tele": {
-            "v": "-",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "-",
-            "s": "agreed"
-          }
-        }
-      },
-      "orig_req_ids": [
-        "REQ-0435",
-        "REQ-0738"
-      ],
-      "req_person": "中村"
-    },
-    {
       "req_id": "REQ-0428",
       "cameras": [
         "Tele",
@@ -76292,111 +76945,6 @@
       "orig_req_ids": [
         "REQ-0436",
         "REQ-0744"
-      ],
-      "req_person": "石地"
-    },
-    {
-      "req_id": "REQ-0429",
-      "cameras": [
-        "Tele",
-        "Side"
-      ],
-      "cat1": "カメラヘッド制御",
-      "cat2": "カメラ制御撮像アプリ定数仕様書",
-      "cat3": "MVH-VDCTRL_EXP_CMN_LOGIC_PARAM-GEN9-STD-010",
-      "ver": "v010",
-      "desc": "認識への出力についての補足説明追記　石地",
-      "issue_date": "2026/04/10",
-      "soc": "",
-      "subteam": "Tele Control",
-      "sw": "",
-      "summary": "",
-      "jira": [],
-      "persons": [
-        "中村 賢治",
-        "村尾 俊和"
-      ],
-      "event_plan": {
-        "SYS4_P1A1": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "SYS4_P2": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "電子CV": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "CV": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB1": {
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB2": {
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB3": {
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB4": {
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB5": {
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB6": {
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        }
-      },
-      "orig_req_ids": [
-        "REQ-0437",
-        "REQ-0745"
       ],
       "req_person": "石地"
     },
@@ -76533,142 +77081,6 @@
         "REQ-0454"
       ],
       "req_person": "石地"
-    },
-    {
-      "req_id": "REQ-0431",
-      "cameras": [
-        "Tele"
-      ],
-      "cat1": "ISP制御",
-      "cat2": "ISP CMN設定値仕様書",
-      "cat3": "MVH-VDCTRL_ISP_CMN_PARAM-GEN9-STD-007",
-      "ver": "v007",
-      "desc": "トーンカーブ上限の最大値の定数変更",
-      "issue_date": "2025-11-07",
-      "soc": "",
-      "subteam": "Tele ISP",
-      "sw": "",
-      "summary": "",
-      "jira": [
-        "BEV26EGSD-6486"
-      ],
-      "persons": [
-        "越坂"
-      ],
-      "event_plan": {
-        "SYS3_P1A1_1巡目": {
-          "Tele": {
-            "v": "x",
-            "s": null
-          }
-        },
-        "SYS3_P1A1_2巡目_優先度①②": {
-          "Tele": {
-            "v": "x",
-            "s": null
-          }
-        },
-        "SYS3_P1A1_2巡目_優先度④": {
-          "Tele": {
-            "v": "x",
-            "s": null
-          }
-        },
-        "PreFOT": {
-          "Tele": {
-            "v": "x",
-            "s": null
-          }
-        },
-        "SYS3_P1A1_3巡目": {
-          "Tele": {
-            "v": "x",
-            "s": null
-          }
-        },
-        "SYS3_P1A2_4巡目": {
-          "Tele": {
-            "v": "○→x",
-            "s": null
-          }
-        },
-        "SYS3_P2A2_#7": {
-          "Tele": {
-            "v": "◎",
-            "s": null
-          }
-        },
-        "FOT": {
-          "Tele": {
-            "v": "◎",
-            "s": null
-          }
-        },
-        "FB1": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB2": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB3": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB4": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB5": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB6": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "SYS4_P1A1": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "SYS4_P2": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "電子CV": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "CV": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          }
-        }
-      },
-      "orig_req_ids": [
-        "REQ-0485"
-      ],
-      "req_person": "越坂"
     },
     {
       "req_id": "REQ-0432",
@@ -76941,163 +77353,6 @@
         "REQ-0488"
       ],
       "req_person": "石地"
-    },
-    {
-      "req_id": "REQ-0434",
-      "cameras": [
-        "Tele",
-        "Side"
-      ],
-      "cat1": "ISP制御(ORIN)",
-      "cat2": "ISP CMN設定値仕様書",
-      "cat3": "MVH-VDCTRL_ISP_CMN_PARAM-GEN9-STD-008",
-      "ver": "v008",
-      "desc": "処理順番起因の上書き対策　BEV26EGSD-7347",
-      "issue_date": "2025-12-01",
-      "soc": "",
-      "subteam": "Tele ISP",
-      "sw": "",
-      "summary": "",
-      "jira": [],
-      "persons": [
-        "越坂"
-      ],
-      "event_plan": {
-        "SYS3_P1A2_4巡目": {
-          "Tele": {
-            "v": "-",
-            "s": null
-          },
-          "Side": {
-            "v": "-",
-            "s": null
-          }
-        },
-        "SYS3_P2A2_#7": {
-          "Tele": {
-            "v": "◎",
-            "s": null
-          },
-          "Side": {
-            "v": "◎",
-            "s": null
-          }
-        },
-        "FOT": {
-          "Tele": {
-            "v": "◎",
-            "s": null
-          },
-          "Side": {
-            "v": "◎",
-            "s": null
-          }
-        },
-        "FB1": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB2": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB3": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB4": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB5": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB6": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "SYS4_P1A1": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "SYS4_P2": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "電子CV": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "CV": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        }
-      },
-      "orig_req_ids": [
-        "REQ-0490"
-      ],
-      "req_person": "越坂"
     },
     {
       "req_id": "REQ-0435",
@@ -77546,163 +77801,6 @@
       },
       "orig_req_ids": [
         "REQ-0558"
-      ],
-      "req_person": "越坂"
-    },
-    {
-      "req_id": "REQ-0442",
-      "cameras": [
-        "Tele",
-        "PVM"
-      ],
-      "cat1": "ISP制御(ORIN)",
-      "cat2": "ISP HAL仕様書",
-      "cat3": "MVH-VDCTRL_ISP_HAL_GEN9_STD-010",
-      "ver": "v010",
-      "desc": "処理順番起因の上書き対策　BEV26EGSD-7347",
-      "issue_date": "2025-12-01",
-      "soc": "",
-      "subteam": "Tele ISP",
-      "sw": "",
-      "summary": "",
-      "jira": [],
-      "persons": [
-        "越坂 禅"
-      ],
-      "event_plan": {
-        "SYS3_P1A2_4巡目": {
-          "Tele": {
-            "v": "-",
-            "s": null
-          },
-          "PVM": {
-            "v": "-",
-            "s": null
-          }
-        },
-        "SYS3_P2A2_#7": {
-          "Tele": {
-            "v": "◎",
-            "s": null
-          },
-          "PVM": {
-            "v": "◎",
-            "s": null
-          }
-        },
-        "FOT": {
-          "Tele": {
-            "v": "◎",
-            "s": null
-          },
-          "PVM": {
-            "v": "◎",
-            "s": null
-          }
-        },
-        "FB1": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "PVM": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB2": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "PVM": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB3": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "PVM": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB4": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "PVM": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB5": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "PVM": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB6": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "PVM": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "SYS4_P1A1": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "PVM": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "SYS4_P2": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "PVM": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "電子CV": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "PVM": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "CV": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "PVM": {
-            "v": "",
-            "s": "agreed"
-          }
-        }
-      },
-      "orig_req_ids": [
-        "REQ-0565"
       ],
       "req_person": "越坂"
     },
@@ -78916,163 +79014,6 @@
       "req_person": "西川"
     },
     {
-      "req_id": "REQ-0468",
-      "cameras": [
-        "Tele",
-        "Side"
-      ],
-      "cat1": "ISP制御(ORIN)",
-      "cat2": "ISP HAL設定値仕様書",
-      "cat3": "MVH-VDCTRL_ISP_HAL_PARAM-GEN9-STD-011",
-      "ver": "v011",
-      "desc": "処理順番起因の上書き対策　BEV26EGSD-7347",
-      "issue_date": "2025-12-01",
-      "soc": "",
-      "subteam": "Tele ISP",
-      "sw": "",
-      "summary": "",
-      "jira": [],
-      "persons": [
-        "越坂 禅"
-      ],
-      "event_plan": {
-        "SYS3_P1A2_4巡目": {
-          "Tele": {
-            "v": "-",
-            "s": null
-          },
-          "Side": {
-            "v": "-",
-            "s": null
-          }
-        },
-        "SYS3_P2A2_#7": {
-          "Tele": {
-            "v": "◎",
-            "s": null
-          },
-          "Side": {
-            "v": "◎",
-            "s": null
-          }
-        },
-        "FOT": {
-          "Tele": {
-            "v": "◎",
-            "s": null
-          },
-          "Side": {
-            "v": "◎",
-            "s": null
-          }
-        },
-        "FB1": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB2": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB3": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB4": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB5": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB6": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "SYS4_P1A1": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "SYS4_P2": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "電子CV": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "CV": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          }
-        }
-      },
-      "orig_req_ids": [
-        "REQ-0664"
-      ],
-      "req_person": "越坂"
-    },
-    {
       "req_id": "REQ-0469",
       "cameras": [
         "Tele"
@@ -79213,260 +79154,6 @@
         "REQ-0671"
       ],
       "req_person": "石地"
-    },
-    {
-      "req_id": "REQ-0470",
-      "cameras": [
-        "Tele",
-        "Side",
-        "PVM"
-      ],
-      "cat1": "ISP制御(ORIN)",
-      "cat2": "ISP HAL設定値仕様書",
-      "cat3": "MVH-VDCTRL_ISP_HAL_PARAM-GEN9-STD-013",
-      "ver": "v013",
-      "desc": "・AWB_UV中央低カウント対策 小林",
-      "issue_date": "2026-01-30",
-      "soc": "",
-      "subteam": "Tele ISP",
-      "sw": "",
-      "summary": "",
-      "jira": [
-        "BEV26EGSD-9241"
-      ],
-      "persons": [
-        "越坂 禅"
-      ],
-      "event_plan": {
-        "PreFOT": {
-          "Tele": {
-            "v": "-",
-            "s": null
-          },
-          "Side": {
-            "v": "-",
-            "s": null
-          },
-          "PVM": {
-            "v": "-",
-            "s": null
-          }
-        },
-        "SYS3_P1A1_3巡目": {
-          "Tele": {
-            "v": "-",
-            "s": null
-          },
-          "Side": {
-            "v": "-",
-            "s": null
-          },
-          "PVM": {
-            "v": "-",
-            "s": null
-          }
-        },
-        "SYS3_P1A2_4巡目": {
-          "Tele": {
-            "v": "-",
-            "s": null
-          },
-          "Side": {
-            "v": "-",
-            "s": null
-          },
-          "PVM": {
-            "v": "-",
-            "s": null
-          }
-        },
-        "SYS3_P2A2_#7": {
-          "Tele": {
-            "v": "○",
-            "s": null
-          },
-          "Side": {
-            "v": "○",
-            "s": null
-          },
-          "PVM": {
-            "v": "○",
-            "s": null
-          }
-        },
-        "FOT": {
-          "Tele": {
-            "v": "○",
-            "s": null
-          },
-          "Side": {
-            "v": "○",
-            "s": null
-          },
-          "PVM": {
-            "v": "○",
-            "s": null
-          }
-        },
-        "FS-CS": {
-          "Tele": {
-            "v": "-",
-            "s": null
-          },
-          "Side": {
-            "v": "-",
-            "s": null
-          },
-          "PVM": {
-            "v": "-",
-            "s": null
-          }
-        },
-        "FB1": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          },
-          "PVM": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB2": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          },
-          "PVM": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB3": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          },
-          "PVM": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB4": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          },
-          "PVM": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB5": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          },
-          "PVM": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB6": {
-          "Tele": {
-            "v": "",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "",
-            "s": "agreed"
-          },
-          "PVM": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "SYS4_P1A1": {
-          "Tele": {
-            "v": "-",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "-",
-            "s": "agreed"
-          },
-          "PVM": {
-            "v": "-",
-            "s": "agreed"
-          }
-        },
-        "SYS4_P2": {
-          "Tele": {
-            "v": "-",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "-",
-            "s": "agreed"
-          },
-          "PVM": {
-            "v": "-",
-            "s": "agreed"
-          }
-        },
-        "電子CV": {
-          "Tele": {
-            "v": "-",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "-",
-            "s": "agreed"
-          },
-          "PVM": {
-            "v": "-",
-            "s": "agreed"
-          }
-        },
-        "CV": {
-          "Tele": {
-            "v": "-",
-            "s": "agreed"
-          },
-          "Side": {
-            "v": "-",
-            "s": "agreed"
-          },
-          "PVM": {
-            "v": "-",
-            "s": "agreed"
-          }
-        }
-      },
-      "orig_req_ids": [
-        "REQ-0676"
-      ],
-      "req_person": "小林"
     },
     {
       "req_id": "REQ-0471",
@@ -89132,250 +88819,6 @@
         "REQ-0880"
       ],
       "req_person": "西川"
-    },
-    {
-      "req_id": "REQ-0563",
-      "cameras": [
-        "PVM"
-      ],
-      "cat1": "ISP制御(ORIN)",
-      "cat2": "ISP HAL設定値仕様書",
-      "cat3": "MVH-VDCTRL_ISP_HAL_PARAM-GEN9-STD-013",
-      "ver": "v013",
-      "desc": "LTM NITO設定値変更　西川",
-      "issue_date": "2026-01-30",
-      "soc": "",
-      "subteam": "PVMカメラ ISP制御",
-      "sw": "",
-      "summary": "",
-      "jira": [],
-      "persons": [
-        "越坂 禅"
-      ],
-      "event_plan": {
-        "PreFOT": {
-          "PVM": {
-            "v": "-",
-            "s": null
-          }
-        },
-        "SYS3_P1A1_3巡目": {
-          "PVM": {
-            "v": "-",
-            "s": null
-          }
-        },
-        "SYS3_P1A2_4巡目": {
-          "PVM": {
-            "v": "-",
-            "s": null
-          }
-        },
-        "SYS3_P2A2_#7": {
-          "PVM": {
-            "v": "-",
-            "s": null
-          }
-        },
-        "FOT": {
-          "PVM": {
-            "v": "○",
-            "s": null
-          }
-        },
-        "FS-CS": {
-          "PVM": {
-            "v": "-",
-            "s": null
-          }
-        },
-        "FB1": {
-          "PVM": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB2": {
-          "PVM": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB3": {
-          "PVM": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB4": {
-          "PVM": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB5": {
-          "PVM": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB6": {
-          "PVM": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "SYS4_P1A1": {
-          "PVM": {
-            "v": "-",
-            "s": "agreed"
-          }
-        },
-        "SYS4_P2": {
-          "PVM": {
-            "v": "-",
-            "s": "agreed"
-          }
-        },
-        "電子CV": {
-          "PVM": {
-            "v": "-",
-            "s": "agreed"
-          }
-        },
-        "CV": {
-          "PVM": {
-            "v": "-",
-            "s": "agreed"
-          }
-        }
-      },
-      "orig_req_ids": [
-        "REQ-0881"
-      ],
-      "req_person": "西川"
-    },
-    {
-      "req_id": "REQ-0564",
-      "cameras": [
-        "PVM"
-      ],
-      "cat1": "ISP制御(ORIN)",
-      "cat2": "ISP HAL設定値仕様書",
-      "cat3": "MVH-VDCTRL_ISP_HAL_PARAM-GEN9-STD-013",
-      "ver": "v013",
-      "desc": "NR強度設定の定数変更",
-      "issue_date": "2026-01-30",
-      "soc": "",
-      "subteam": "PVMカメラ ISP制御",
-      "sw": "",
-      "summary": "",
-      "jira": [],
-      "persons": [
-        "越坂 禅"
-      ],
-      "event_plan": {
-        "PreFOT": {
-          "PVM": {
-            "v": "-",
-            "s": null
-          }
-        },
-        "SYS3_P1A1_3巡目": {
-          "PVM": {
-            "v": "-",
-            "s": null
-          }
-        },
-        "SYS3_P1A2_4巡目": {
-          "PVM": {
-            "v": "-",
-            "s": null
-          }
-        },
-        "SYS3_P2A2_#7": {
-          "PVM": {
-            "v": "-",
-            "s": null
-          }
-        },
-        "FOT": {
-          "PVM": {
-            "v": "○",
-            "s": null
-          }
-        },
-        "FS-CS": {
-          "PVM": {
-            "v": "-",
-            "s": null
-          }
-        },
-        "FB1": {
-          "PVM": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB2": {
-          "PVM": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB3": {
-          "PVM": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB4": {
-          "PVM": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB5": {
-          "PVM": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "FB6": {
-          "PVM": {
-            "v": "",
-            "s": "agreed"
-          }
-        },
-        "SYS4_P1A1": {
-          "PVM": {
-            "v": "-",
-            "s": "agreed"
-          }
-        },
-        "SYS4_P2": {
-          "PVM": {
-            "v": "-",
-            "s": "agreed"
-          }
-        },
-        "電子CV": {
-          "PVM": {
-            "v": "-",
-            "s": "agreed"
-          }
-        },
-        "CV": {
-          "PVM": {
-            "v": "-",
-            "s": "agreed"
-          }
-        }
-      },
-      "orig_req_ids": [
-        "REQ-0882"
-      ],
-      "req_person": "越坂"
     },
     {
       "req_id": "REQ-0565",
