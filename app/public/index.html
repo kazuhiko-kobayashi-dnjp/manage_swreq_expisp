@@ -554,6 +554,17 @@ function applyDependencyCascade(r) {
   var cfg = G.events_config || [];
   if (!cfg.length) return r.event_plan || {};
   var ep = JSON.parse(JSON.stringify(r.event_plan || {}));
+  // 'All'キーを個別カメラに展開
+  Object.keys(ep).forEach(function(evName){
+    var cm = ep[evName];
+    if (cm && cm['All']) {
+      var allVal = cm['All'];
+      expandCams(['All']).forEach(function(c){
+        if (!cm[c] || !cm[c].s) cm[c] = allVal;
+      });
+      delete cm['All'];
+    }
+  });
   // Build parent map: event_name → parent_name
   var parentMap = {};
   cfg.forEach(function(e){ if (e.parent) parentMap[e.name] = e.parent; });
